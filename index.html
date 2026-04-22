@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,53 +16,42 @@
   * { font-family: 'Inter', sans-serif; }
   body { background: #f8fafc; }
   .gradient-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-  .card-qwen2 { --accent: #3b82f6; --accent-light: #dbeafe; --accent-bg: rgba(59,130,246,0.08); }
-  .card-qwen3 { --accent: #8b5cf6; --accent-light: #ede9fe; --accent-bg: rgba(139,92,246,0.08); }
-  .card-llama { --accent: #10b981; --accent-light: #d1fae5; --accent-bg: rgba(16,185,129,0.08); }
-  .card-gemma { --accent: #f59e0b; --accent-light: #fef3c7; --accent-bg: rgba(245,158,11,0.08); }
+  .card-qwen2 { --accent: #3b82f6; --accent-light: #dbeafe; }
+  .card-qwen3 { --accent: #8b5cf6; --accent-light: #ede9fe; }
+  .card-llama { --accent: #10b981; --accent-light: #d1fae5; }
+  .card-gemma { --accent: #f59e0b; --accent-light: #fef3c7; }
   .model-card { border-left: 4px solid var(--accent); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
   .model-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-  .stat-bar { height: 10px; border-radius: 5px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
-  .tab-btn { transition: all 0.3s ease; }
-  .tab-btn.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-  .compare-row { transition: all 0.3s ease; }
-  .compare-row:hover { background: #f1f5f9; }
-  .fade-in { animation: fadeIn 0.6s ease forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-  .slide-in { animation: slideRight 0.5s ease forwards; }
-  .pulse-dot { animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-  .tooltip-custom { position: relative; }
-  .tooltip-custom::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-  .tooltip-custom:hover::after { opacity: 1; }
   .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .comparison-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+  .ram-device-btn { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); border: 2px solid #e2e8f0; }
+  .ram-device-btn.active { border-color: #764ba2; background: linear-gradient(135deg, #667eea, #764ba2); color: white; transform: scale(1.05); box-shadow: 0 8px 24px rgba(102,126,234,0.3); }
+  .ram-bar-container { height: 40px; border-radius: 12px; overflow: hidden; position: relative; }
+  .ram-bar-segment { height: 100%; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); display: flex; align-items: center; justify-content: center; }
+  .model-select-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+  .model-select-btn.active { transform: scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+  .sim-result { animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .fade-in { animation: fadeIn 0.6s ease forwards; }
+  .pulse-dot { animation: pulse 2s infinite; }
+  .os-badge { cursor: pointer; transition: all 0.2s; border: 2px solid #e2e8f0; }
+  .os-badge.active { border-color: #667eea; background: #f0f0ff; }
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: #f1f5f9; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
   .lang-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; }
-  .chart-container { position: relative; }
-  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-  .progress-ring { transform: rotate(-90deg); }
-  .mobile-friendly { display: none; }
-  @media (max-width: 640px) { .mobile-friendly { display: block; } .desktop-only { display: none; } }
-  .comparison-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
 </style>
-<script>
-tailwind.config = {
-  theme: { extend: { colors: { qwen2: '#3b82f6', qwen3: '#8b5cf6', llama: '#10b981', gemma: '#f59e0b' } } }
-}
-</script>
 </head>
 <body class="text-slate-800">
 
-<!-- Language Toggle -->
 <div class="lang-toggle glass rounded-xl px-3 py-2 flex items-center gap-2 shadow-lg">
-  <button id="btnES" class="px-3 py-1 rounded-lg text-sm font-semibold transition-all" onclick="setLang('es')">🇪🇸 ES</button>
-  <button id="btnEN" class="px-3 py-1 rounded-lg text-sm font-semibold transition-all" onclick="setLang('en')">🇺🇸 EN</button>
+  <button id="btnES" class="px-3 py-1 rounded-lg text-sm font-semibold transition-all bg-white text-purple-700 shadow" onclick="setLang('es')">🇪🇸 ES</button>
+  <button id="btnEN" class="px-3 py-1 rounded-lg text-sm font-semibold transition-all text-slate-600" onclick="setLang('en')">🇺🇸 EN</button>
 </div>
 
-<!-- Hero Section -->
 <header class="gradient-header text-white relative overflow-hidden">
   <div class="absolute inset-0 opacity-10">
     <svg viewBox="0 0 1440 400" class="w-full h-full"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="1440" height="400" fill="url(#grid)"/></svg>
@@ -76,44 +66,26 @@ tailwind.config = {
         <span data-i18n="heroTitle">Comparativa de Modelos</span><br>
         <span class="text-blue-200" data-i18n="heroSubtitle">IA Locales para Móvil</span>
       </h1>
-      <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-8" data-i18n="heroDesc">
-        Análisis detallado de RAM, contexto, especialidades y rendimiento real de los 4 modelos más populares en cuantización Q4.
-      </p>
+      <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-8" data-i18n="heroDesc">Análisis detallado de RAM, contexto, especialidades y rendimiento real de los 4 modelos más populares en cuantización Q4.</p>
       <div class="flex flex-wrap justify-center gap-3">
         <a href="#charts" class="bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:shadow-xl transition-all hover:-translate-y-0.5" data-i18n="heroCTA1">📊 Ver Gráficas</a>
-        <a href="#compare" class="bg-white/20 backdrop-blur-sm text-white font-bold px-6 py-3 rounded-xl hover:bg-white/30 transition-all border border-white/30" data-i18n="heroCTA2">🔄 Comparar Modelos</a>
+        <a href="#simulator" class="bg-white/20 backdrop-blur-sm text-white font-bold px-6 py-3 rounded-xl hover:bg-white/30 transition-all border border-white/30" data-i18n="heroCTA2">📱 Simulador RAM</a>
+        <a href="#compare" class="bg-white/20 backdrop-blur-sm text-white font-bold px-6 py-3 rounded-xl hover:bg-white/30 transition-all border border-white/30" data-i18n="heroCTA3">🔄 Comparar Modelos</a>
       </div>
     </div>
     <div class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
-      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-        <div class="text-2xl font-bold">4</div>
-        <div class="text-sm text-blue-200" data-i18n="statModels">Modelos</div>
-      </div>
-      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-        <div class="text-2xl font-bold">Q4</div>
-        <div class="text-sm text-blue-200" data-i18n="statQuant">Cuantización</div>
-      </div>
-      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-        <div class="text-2xl font-bold">3-4B</div>
-        <div class="text-sm text-blue-200" data-i18n="statParams">Parámetros</div>
-      </div>
-      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-        <div class="text-2xl font-bold">128K</div>
-        <div class="text-sm text-blue-200" data-i18n="statContext">Contexto Máx</div>
-      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20"><div class="text-2xl font-bold">4</div><div class="text-sm text-blue-200" data-i18n="statModels">Modelos</div></div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20"><div class="text-2xl font-bold">Q4</div><div class="text-sm text-blue-200" data-i18n="statQuant">Cuantización</div></div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20"><div class="text-2xl font-bold">3-4B</div><div class="text-sm text-blue-200" data-i18n="statParams">Parámetros</div></div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20"><div class="text-2xl font-bold">128K</div><div class="text-sm text-blue-200" data-i18n="statContext">Contexto Máx</div></div>
     </div>
   </div>
 </header>
 
-<!-- Model Overview Cards -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-    <!-- Qwen2.5-3B -->
     <div class="model-card card-qwen2 bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.1s">
-      <div class="flex items-center justify-between mb-3">
-        <span class="badge bg-blue-100 text-blue-700">Alibaba</span>
-        <span class="badge bg-emerald-100 text-emerald-700">⭐ Mejor RAM</span>
-      </div>
+      <div class="flex items-center justify-between mb-3"><span class="badge bg-blue-100 text-blue-700">Alibaba</span><span class="badge bg-emerald-100 text-emerald-700">⭐ Mejor RAM</span></div>
       <h3 class="font-bold text-lg mb-1">Qwen2.5-3B</h3>
       <p class="text-xs text-slate-500 mb-3" data-i18n="qwen2Desc">Open source, excel en código y matemáticas</p>
       <div class="space-y-2">
@@ -123,12 +95,8 @@ tailwind.config = {
         <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-blue-600">29+</span></div>
       </div>
     </div>
-    <!-- Qwen3-4B -->
     <div class="model-card card-qwen3 bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.2s">
-      <div class="flex items-center justify-between mb-3">
-        <span class="badge bg-purple-100 text-purple-700">Alibaba</span>
-        <span class="badge bg-purple-100 text-purple-700">🧠 Razonamiento</span>
-      </div>
+      <div class="flex items-center justify-between mb-3"><span class="badge bg-purple-100 text-purple-700">Alibaba</span><span class="badge bg-purple-100 text-purple-700">🧠 Razonamiento</span></div>
       <h3 class="font-bold text-lg mb-1">Qwen3-4B</h3>
       <p class="text-xs text-slate-500 mb-3" data-i18n="qwen3Desc">Generación 2025, reasoning mejorado</p>
       <div class="space-y-2">
@@ -138,12 +106,8 @@ tailwind.config = {
         <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-purple-600">100+</span></div>
       </div>
     </div>
-    <!-- Llama3.2-3B -->
     <div class="model-card card-llama bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.3s">
-      <div class="flex items-center justify-between mb-3">
-        <span class="badge bg-emerald-100 text-emerald-700">Meta</span>
-        <span class="badge bg-emerald-100 text-emerald-700">🌐 General</span>
-      </div>
+      <div class="flex items-center justify-between mb-3"><span class="badge bg-emerald-100 text-emerald-700">Meta</span><span class="badge bg-emerald-100 text-emerald-700">🌐 General</span></div>
       <h3 class="font-bold text-lg mb-1">Llama 3.2-3B</h3>
       <p class="text-xs text-slate-500 mb-3" data-i18n="llamaDesc">Propósito general, optimizado para edge</p>
       <div class="space-y-2">
@@ -153,12 +117,8 @@ tailwind.config = {
         <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-emerald-600">8+</span></div>
       </div>
     </div>
-    <!-- Gemma3-4B -->
     <div class="model-card card-gemma bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.4s">
-      <div class="flex items-center justify-between mb-3">
-        <span class="badge bg-amber-100 text-amber-700">Google</span>
-        <span class="badge bg-amber-100 text-amber-700">👁️ Vision</span>
-      </div>
+      <div class="flex items-center justify-between mb-3"><span class="badge bg-amber-100 text-amber-700">Google</span><span class="badge bg-amber-100 text-amber-700">👁️ Vision</span></div>
       <h3 class="font-bold text-lg mb-1">Gemma3-4B</h3>
       <p class="text-xs text-slate-500 mb-3" data-i18n="gemmaDesc">Multimodal, eficiente para visión</p>
       <div class="space-y-2">
@@ -171,81 +131,107 @@ tailwind.config = {
   </div>
 </section>
 
-<!-- Charts Section -->
 <section id="charts" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="chartsTitle"> Gráficas Comparativas</h2>
+  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="chartsTitle">📊 Gráficas Comparativas</h2>
   <p class="text-center text-slate-500 mb-10" data-i18n="chartsSubtitle">Análisis visual de rendimiento y consumo de recursos</p>
-  
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- RAM Usage Chart -->
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-1" data-i18n="ramChartTitle">Uso Real de RAM (Q4)</h3>
       <p class="text-sm text-slate-500 mb-4" data-i18n="ramChartDesc">Memoria consumida durante inferencia en dispositivo móvil</p>
-      <div class="chart-container" style="height:300px">
-        <canvas id="ramChart"></canvas>
-      </div>
+      <div style="height:300px"><canvas id="ramChart"></canvas></div>
     </div>
-    <!-- Context Window Chart -->
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-1" data-i18n="contextChartTitle">Ventana de Contexto</h3>
       <p class="text-sm text-slate-500 mb-4" data-i18n="contextChartDesc">Tokens máximos de contexto soportados</p>
-      <div class="chart-container" style="height:300px">
-        <canvas id="contextChart"></canvas>
-      </div>
+      <div style="height:300px"><canvas id="contextChart"></canvas></div>
     </div>
-    <!-- Radar Chart -->
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-1" data-i18n="radarTitle">Habilidades por Especialidad</h3>
       <p class="text-sm text-slate-500 mb-4" data-i18n="radarDesc">Comparación de fortalezas en diferentes áreas</p>
-      <div class="chart-container" style="height:350px">
-        <canvas id="radarChart"></canvas>
-      </div>
+      <div style="height:350px"><canvas id="radarChart"></canvas></div>
     </div>
-    <!-- Performance Score Chart -->
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-1" data-i18n="benchTitle">Puntuación Benchmarks</h3>
       <p class="text-sm text-slate-500 mb-4" data-i18n="benchDesc">MMLU, GSM8K y HumanEval (valores aproximados)</p>
-      <div class="chart-container" style="height:300px">
-        <canvas id="benchChart"></canvas>
-      </div>
+      <div style="height:300px"><canvas id="benchChart"></canvas></div>
     </div>
   </div>
 </section>
 
-<!-- Mobile Compatibility -->
+<section id="simulator" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
+  <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+    <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-8 text-white">
+      <h2 class="text-2xl sm:text-3xl font-extrabold mb-2" data-i18n="simTitle">📱 Simulador de Carga de Modelo</h2>
+      <p class="text-white/80" data-i18n="simSubtitle">Simula la carga de un modelo en diferentes dispositivos con RAM real disponible (descontando el sistema operativo)</p>
+    </div>
+    <div class="p-6 sm:p-8">
+      <div class="mb-8">
+        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">
+          <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+          <span data-i18n="simStep1">Selecciona la RAM de tu dispositivo</span>
+        </h3>
+        <div class="flex flex-wrap gap-3">
+          <button class="ram-device-btn active rounded-xl px-6 py-4 text-center min-w-[120px]" onclick="selectRam(6)" id="ram6"><div class="text-2xl font-bold">6 GB</div><div class="text-xs opacity-70" data-i18n="simMidRange">Gama Media</div></button>
+          <button class="ram-device-btn rounded-xl px-6 py-4 text-center min-w-[120px]" onclick="selectRam(8)" id="ram8"><div class="text-2xl font-bold">8 GB</div><div class="text-xs opacity-70" data-i18n="simHighEnd">Gama Alta</div></button>
+          <button class="ram-device-btn rounded-xl px-6 py-4 text-center min-w-[120px]" onclick="selectRam(12)" id="ram12"><div class="text-2xl font-bold">12 GB</div><div class="text-xs opacity-70" data-i18n="simFlagship">Flagship</div></button>
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">
+          <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+          <span data-i18n="simStep2">Selecciona el Sistema Operativo</span>
+        </h3>
+        <div class="flex flex-wrap gap-3">
+          <button class="os-badge active rounded-xl px-5 py-3 flex items-center gap-3" onclick="selectOS('android')" id="osAndroid">
+            <span class="text-2xl">🤖</span>
+            <div><div class="font-bold text-sm">Android 14</div><div class="text-xs text-slate-500" data-i18n="simAndroidUsage">~2.5 GB uso sistema</div></div>
+          </button>
+          <button class="os-badge rounded-xl px-5 py-3 flex items-center gap-3" onclick="selectOS('ios')" id="osIOS">
+            <span class="text-2xl">🍎</span>
+            <div><div class="font-bold text-sm">iOS 17/18</div><div class="text-xs text-slate-500" data-i18n="simIOSUsage">~1.8 GB uso sistema</div></div>
+          </button>
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">
+          <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+          <span data-i18n="simStep3">Selecciona el modelo a cargar</span>
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <button class="model-select-btn rounded-xl p-4 text-center model-btn active" onclick="selectModel('qwen2')" id="modelQwen2" style="border-color:#3b82f6"><div class="text-lg font-bold text-blue-600">Qwen2.5-3B</div><div class="text-xs text-slate-500">Q4_K_M</div><div class="text-sm font-bold mt-1">1.67 GB</div></button>
+          <button class="model-select-btn rounded-xl p-4 text-center model-btn" onclick="selectModel('qwen3')" id="modelQwen3" style="border-color:#8b5cf6"><div class="text-lg font-bold text-purple-600">Qwen3-4B</div><div class="text-xs text-slate-500">Q4_K_M</div><div class="text-sm font-bold mt-1">2.50 GB</div></button>
+          <button class="model-select-btn rounded-xl p-4 text-center model-btn" onclick="selectModel('llama')" id="modelLlama" style="border-color:#10b981"><div class="text-lg font-bold text-emerald-600">Llama 3.2-3B</div><div class="text-xs text-slate-500">Q4_K_M</div><div class="text-sm font-bold mt-1">1.80 GB</div></button>
+          <button class="model-select-btn rounded-xl p-4 text-center model-btn" onclick="selectModel('gemma')" id="modelGemma" style="border-color:#f59e0b"><div class="text-lg font-bold text-amber-600">Gemma3-4B</div><div class="text-xs text-slate-500">Q4_K_M</div><div class="text-sm font-bold mt-1">2.65 GB</div></button>
+        </div>
+      </div>
+      <div id="simResult" class="sim-result"></div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-16">
+  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="simChartsTitle">📊 Simulación en Todos los Dispositivos</h2>
+  <p class="text-center text-slate-500 mb-8" data-i18n="simChartsSubtitle">Vista completa de qué modelos caben en cada configuración de RAM</p>
+  <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+    <div style="height:400px"><canvas id="simStackChart"></canvas></div>
+  </div>
+</section>
+
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
   <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-8 text-white">
-    <h2 class="text-2xl font-extrabold mb-6 text-center" data-i18n="mobileTitle"> Compatibilidad Móvil</h2>
+    <h2 class="text-2xl font-extrabold mb-6 text-center" data-i18n="mobileTitle">📱 Compatibilidad Móvil</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
-        <div class="text-3xl mb-3"></div>
-        <h4 class="font-bold text-blue-300 mb-2">Qwen2.5-3B</h4>
-        <p class="text-sm text-slate-300" data-i18n="mobileQwen2">Funciona en móviles con 4GB+ RAM. Ideal para dispositivos gama media. Inferencia ~15-25 tok/s.</p>
-      </div>
-      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
-        <div class="text-3xl mb-3">🟡</div>
-        <h4 class="font-bold text-purple-300 mb-2">Qwen3-4B</h4>
-        <p class="text-sm text-slate-300" data-i18n="mobileQwen3">Requiere 6GB+ RAM recomendado. Mejor rendimiento en gama alta. Inferencia ~10-20 tok/s.</p>
-      </div>
-      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
-        <div class="text-3xl mb-3">🟢</div>
-        <h4 class="font-bold text-emerald-300 mb-2">Llama 3.2-3B</h4>
-        <p class="text-sm text-slate-300" data-i18n="mobileLlama">Funciona en móviles con 4GB+ RAM. Muy optimizado para edge. Inferencia ~20-30 tok/s.</p>
-      </div>
-      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
-        <div class="text-3xl mb-3">🟡</div>
-        <h4 class="font-bold text-amber-300 mb-2">Gemma3-4B</h4>
-        <p class="text-sm text-slate-300" data-i18n="mobileGemma">Requiere 6GB+ RAM. Multimodal necesita más recursos. Inferencia ~10-18 tok/s.</p>
-      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10"><div class="text-3xl mb-3">🔵</div><h4 class="font-bold text-blue-300 mb-2">Qwen2.5-3B</h4><p class="text-sm text-slate-300" data-i18n="mobileQwen2">Funciona en móviles con 4GB+ RAM. Ideal para dispositivos gama media. Inferencia ~15-25 tok/s.</p></div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10"><div class="text-3xl mb-3">🟡</div><h4 class="font-bold text-purple-300 mb-2">Qwen3-4B</h4><p class="text-sm text-slate-300" data-i18n="mobileQwen3">Requiere 6GB+ RAM recomendado. Mejor rendimiento en gama alta. Inferencia ~10-20 tok/s.</p></div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10"><div class="text-3xl mb-3">🟢</div><h4 class="font-bold text-emerald-300 mb-2">Llama 3.2-3B</h4><p class="text-sm text-slate-300" data-i18n="mobileLlama">Funciona en móviles con 4GB+ RAM. Muy optimizado para edge. Inferencia ~20-30 tok/s.</p></div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10"><div class="text-3xl mb-3">🟡</div><h4 class="font-bold text-amber-300 mb-2">Gemma3-4B</h4><p class="text-sm text-slate-300" data-i18n="mobileGemma">Requiere 6GB+ RAM. Multimodal necesita más recursos. Inferencia ~10-18 tok/s.</p></div>
     </div>
   </div>
 </section>
 
-<!-- Comparison Tool -->
 <section id="compare" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
   <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="compareTitle">🔄 Comparador de Modelos</h2>
   <p class="text-center text-slate-500 mb-8" data-i18n="compareSubtitle">Selecciona dos modelos para comparar especificaciones</p>
-  
   <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
     <div class="flex flex-col sm:flex-row gap-4 mb-8">
       <div class="flex-1">
@@ -257,9 +243,7 @@ tailwind.config = {
           <option value="gemma">Gemma3-4B-Q4</option>
         </select>
       </div>
-      <div class="flex items-center justify-center pt-6 sm:pt-8">
-        <span class="text-2xl font-bold text-slate-300">VS</span>
-      </div>
+      <div class="flex items-center justify-center pt-6 sm:pt-8"><span class="text-2xl font-bold text-slate-300">VS</span></div>
       <div class="flex-1">
         <label class="block text-sm font-semibold text-slate-600 mb-2" data-i18n="selectModel2">Modelo B</label>
         <select id="selectB" class="comparison-select w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none bg-white text-sm font-medium transition-all" onchange="updateComparison()">
@@ -270,103 +254,70 @@ tailwind.config = {
         </select>
       </div>
     </div>
-    
-    <div id="comparisonResult" class="overflow-x-auto">
-      <!-- Filled by JS -->
-    </div>
+    <div id="comparisonResult" class="overflow-x-auto"></div>
   </div>
 </section>
 
-<!-- Best Use Cases -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
   <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="bestUseTitle">🎯 Mejor Uso por Escenario</h2>
   <p class="text-center text-slate-500 mb-8" data-i18n="bestUseSubtitle">¿Qué modelo elegir según tu necesidad?</p>
-  
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-4 flex items-center gap-2">📱 <span data-i18n="scenarioMobile">Móvil / Edge</span></h3>
       <div class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl">
-          <span class="text-emerald-600 font-bold text-sm">🏆</span>
-          <div><div class="font-semibold text-sm">Llama 3.2-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyLlama">Mayor velocidad, menor consumo RAM</div></div>
-        </div>
-        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
-          <span class="text-blue-600 font-bold text-sm">2°</span>
-          <div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Edge">Gran soporte multilingüe, buen balance</div></div>
-        </div>
+        <div class="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl"><span class="text-emerald-600 font-bold text-sm">🏆</span><div><div class="font-semibold text-sm">Llama 3.2-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyLlama">Mayor velocidad, menor consumo RAM</div></div></div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl"><span class="text-blue-600 font-bold text-sm">2°</span><div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Edge">Gran soporte multilingüe, buen balance</div></div></div>
       </div>
     </div>
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-4 flex items-center gap-2">💻 <span data-i18n="scenarioCoding">Desarrollo / Código</span></h3>
       <div class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
-          <span class="text-blue-600 font-bold text-sm">🏆</span>
-          <div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Code">Excelente en HumanEval, generación de código</div></div>
-        </div>
-        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
-          <span class="text-purple-600 font-bold text-sm">2°</span>
-          <div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Code">Reasoning mejorado para debugging</div></div>
-        </div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl"><span class="text-blue-600 font-bold text-sm">🏆</span><div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Code">Excelente en HumanEval, generación de código</div></div></div>
+        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl"><span class="text-purple-600 font-bold text-sm">2°</span><div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Code">Reasoning mejorado para debugging</div></div></div>
       </div>
     </div>
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
       <h3 class="font-bold text-lg mb-4 flex items-center gap-2">🧮 <span data-i18n="scenarioMath">Matemáticas / Ciencia</span></h3>
       <div class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
-          <span class="text-purple-600 font-bold text-sm">🏆</span>
-          <div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Math">Razonamiento matemático superior</div></div>
-        </div>
-        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
-          <span class="text-blue-600 font-bold text-sm">2°</span>
-          <div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Math">Buen rendimiento en GSM8K</div></div>
-        </div>
+        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl"><span class="text-purple-600 font-bold text-sm">🏆</span><div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Math">Razonamiento matemático superior</div></div></div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl"><span class="text-blue-600 font-bold text-sm">2°</span><div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Math">Buen rendimiento en GSM8K</div></div></div>
       </div>
     </div>
     <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
-      <h3 class="font-bold text-lg mb-4 flex items-center gap-2">️ <span data-i18n="scenarioVision">Visión / Multimodal</span></h3>
+      <h3 class="font-bold text-lg mb-4 flex items-center gap-2">👁️ <span data-i18n="scenarioVision">Visión / Multimodal</span></h3>
       <div class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl">
-          <span class="text-amber-600 font-bold text-sm">🏆</span>
-          <div><div class="font-semibold text-sm">Gemma3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyGemmaVision">Diseñado nativamente para visión+texto</div></div>
-        </div>
-        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
-          <span class="text-purple-600 font-bold text-sm">2°</span>
-          <div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Vision">Soporte multimodal en desarrollo</div></div>
-        </div>
+        <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl"><span class="text-amber-600 font-bold text-sm">🏆</span><div><div class="font-semibold text-sm">Gemma3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyGemmaVision">Diseñado nativamente para visión+texto</div></div></div>
+        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl"><span class="text-purple-600 font-bold text-sm">2°</span><div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Vision">Soporte multimodal en desarrollo</div></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Technical Specs Table -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
   <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="specsTitle">📋 Especificaciones Técnicas Completas</h2>
   <p class="text-center text-slate-500 mb-8" data-i18n="specsSubtitle">Tabla detallada de todos los parámetros</p>
-  
   <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
-        <thead>
-          <tr class="bg-slate-50">
-            <th class="text-left p-4 font-bold text-slate-700" data-i18n="specCol">Especificación</th>
-            <th class="text-center p-4 font-bold text-blue-600">Qwen2.5-3B</th>
-            <th class="text-center p-4 font-bold text-purple-600">Qwen3-4B</th>
-            <th class="text-center p-4 font-bold text-emerald-600">Llama 3.2-3B</th>
-            <th class="text-center p-4 font-bold text-amber-600">Gemma3-4B</th>
-          </tr>
-        </thead>
+        <thead><tr class="bg-slate-50">
+          <th class="text-left p-4 font-bold text-slate-700" data-i18n="specCol">Especificación</th>
+          <th class="text-center p-4 font-bold text-blue-600">Qwen2.5-3B</th>
+          <th class="text-center p-4 font-bold text-purple-600">Qwen3-4B</th>
+          <th class="text-center p-4 font-bold text-emerald-600">Llama 3.2-3B</th>
+          <th class="text-center p-4 font-bold text-amber-600">Gemma3-4B</th>
+        </tr></thead>
         <tbody class="divide-y divide-slate-100">
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specDev">Desarrollador</td><td class="p-4 text-center">Alibaba</td><td class="p-4 text-center">Alibaba</td><td class="p-4 text-center">Meta</td><td class="p-4 text-center">Google</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specParams">Parámetros</td><td class="p-4 text-center">3.1B</td><td class="p-4 text-center">4.0B</td><td class="p-4 text-center">3.05B</td><td class="p-4 text-center">4.0B</td></tr>
-          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specArch">Arquitectura</td><td class="p-4 text-center">MoE / Dense</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specArch">Arquitectura</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specRAM">RAM Q4 (real)</td><td class="p-4 text-center"><span class="badge bg-blue-100 text-blue-700">~1.8 GB</span></td><td class="p-4 text-center"><span class="badge bg-purple-100 text-purple-700">~2.6 GB</span></td><td class="p-4 text-center"><span class="badge bg-emerald-100 text-emerald-700">~1.9 GB</span></td><td class="p-4 text-center"><span class="badge bg-amber-100 text-amber-700">~2.7 GB</span></td></tr>
-          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specSizeQ4">Tamaño Q4</td><td class="p-4 text-center">~1.7 GB</td><td class="p-4 text-center">~2.5 GB</td><td class="p-4 text-center">~1.8 GB</td><td class="p-4 text-center">~2.5 GB</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specSizeQ4">Tamaño Q4 GGUF</td><td class="p-4 text-center">1.67 GB</td><td class="p-4 text-center">2.50 GB</td><td class="p-4 text-center">1.80 GB</td><td class="p-4 text-center">2.65 GB</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specContext">Contexto Máx</td><td class="p-4 text-center"><span class="badge bg-blue-100 text-blue-700">128K</span></td><td class="p-4 text-center"><span class="badge bg-purple-100 text-purple-700">128K</span></td><td class="p-4 text-center"><span class="badge bg-emerald-100 text-emerald-700">128K</span></td><td class="p-4 text-center"><span class="badge bg-amber-100 text-amber-700">8K-28K</span></td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specLangs">Idiomas</td><td class="p-4 text-center">29+</td><td class="p-4 text-center">100+</td><td class="p-4 text-center">8</td><td class="p-4 text-center">100+</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold">MMLU</td><td class="p-4 text-center font-bold">~54</td><td class="p-4 text-center font-bold">~62</td><td class="p-4 text-center font-bold">~51</td><td class="p-4 text-center font-bold">~58</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold">GSM8K</td><td class="p-4 text-center font-bold">~72</td><td class="p-4 text-center font-bold">~78</td><td class="p-4 text-center font-bold">~65</td><td class="p-4 text-center font-bold">~60</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold">HumanEval</td><td class="p-4 text-center font-bold">~45</td><td class="p-4 text-center font-bold">~48</td><td class="p-4 text-center font-bold">~38</td><td class="p-4 text-center font-bold">~35</td></tr>
-          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specVision">Soporte Visión</td><td class="p-4 text-center">❌</td><td class="p-4 text-center">️ Parcial</td><td class="p-4 text-center">❌</td><td class="p-4 text-center">✅ Sí</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specVision">Soporte Visión</td><td class="p-4 text-center">❌</td><td class="p-4 text-center">⚠️ Parcial</td><td class="p-4 text-center">❌</td><td class="p-4 text-center">✅ Sí</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specTool">Tool Calling</td><td class="p-4 text-center">✅ Sí</td><td class="p-4 text-center">✅ Sí</td><td class="p-4 text-center">✅ Sí</td><td class="p-4 text-center">✅ Sí</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specLicense">Licencia</td><td class="p-4 text-center" data-i18n="licenseApache">Apache 2.0</td><td class="p-4 text-center" data-i18n="licenseApache">Apache 2.0</td><td class="p-4 text-center" data-i18n="licenseLlama">Llama Community</td><td class="p-4 text-center" data-i18n="licenseGemma">Gemma (uso comercial)</td></tr>
           <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specInference">Vel. Inferencia* (tok/s)</td><td class="p-4 text-center">15-25</td><td class="p-4 text-center">10-20</td><td class="p-4 text-center">20-30</td><td class="p-4 text-center">10-18</td></tr>
@@ -381,56 +332,34 @@ tailwind.config = {
   </div>
 </section>
 
-<!-- Winner Badge -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
   <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-emerald-50 rounded-3xl p-8 sm:p-12 border border-slate-200">
     <h2 class="text-3xl font-extrabold text-center mb-8" data-i18n="winnerTitle">🏆 Veredicto Final</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white rounded-2xl p-6 shadow-md">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">📱</span>
-          <h3 class="font-bold text-lg" data-i18n="winnerMobile">Para Móvil / Dispositivos Edge</h3>
-        </div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Llama 3.2-3B-Q4</span>
-        </div>
+        <div class="flex items-center gap-3 mb-3"><span class="text-3xl">📱</span><h3 class="font-bold text-lg" data-i18n="winnerMobile">Para Móvil / Dispositivos Edge</h3></div>
+        <div class="flex items-center gap-2 mb-2"><span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Llama 3.2-3B-Q4</span></div>
         <p class="text-sm text-slate-600" data-i18n="winnerMobileDesc">El más eficiente en RAM con el mejor rendimiento en dispositivos de gama media. Inferencia más rápida.</p>
       </div>
       <div class="bg-white rounded-2xl p-6 shadow-md">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">🧠</span>
-          <h3 class="font-bold text-lg" data-i18n="winnerGeneral">Más General / Capaz</h3>
-        </div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Qwen3-4B-Q4</span>
-        </div>
+        <div class="flex items-center gap-3 mb-3"><span class="text-3xl">🧠</span><h3 class="font-bold text-lg" data-i18n="winnerGeneral">Más General / Capaz</h3></div>
+        <div class="flex items-center gap-2 mb-2"><span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Qwen3-4B-Q4</span></div>
         <p class="text-sm text-slate-600" data-i18n="winnerGeneralDesc">Mejores puntuaciones en benchmarks de razonamiento y matemáticas. Soporte 100+ idiomas.</p>
       </div>
       <div class="bg-white rounded-2xl p-6 shadow-md">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">💻</span>
-          <h3 class="font-bold text-lg" data-i18n="winnerCode">Para Programación</h3>
-        </div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Qwen2.5-3B-Q4</span>
-        </div>
+        <div class="flex items-center gap-3 mb-3"><span class="text-3xl">💻</span><h3 class="font-bold text-lg" data-i18n="winnerCode">Para Programación</h3></div>
+        <div class="flex items-center gap-2 mb-2"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Qwen2.5-3B-Q4</span></div>
         <p class="text-sm text-slate-600" data-i18n="winnerCodeDesc">Mejor puntuación en HumanEval. Excelente generación de código en múltiples lenguajes.</p>
       </div>
       <div class="bg-white rounded-2xl p-6 shadow-md">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">👁️</span>
-          <h3 class="font-bold text-lg" data-i18n="winnerVision">Para Visión / Multimodal</h3>
-        </div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Gemma3-4B-Q4</span>
-        </div>
+        <div class="flex items-center gap-3 mb-3"><span class="text-3xl">👁️</span><h3 class="font-bold text-lg" data-i18n="winnerVision">Para Visión / Multimodal</h3></div>
+        <div class="flex items-center gap-2 mb-2"><span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Gemma3-4B-Q4</span></div>
         <p class="text-sm text-slate-600" data-i18n="winnerVisionDesc">Único con soporte nativo multimodal. Ideal para análisis de imágenes + texto.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
 <footer class="bg-slate-900 text-white py-12 mt-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h3 class="text-xl font-bold mb-4">AI Models Infographic</h3>
@@ -440,298 +369,174 @@ tailwind.config = {
 </footer>
 
 <script>
-// ==================== DATA ====================
 const modelsData = {
-  qwen2: {
-    name: 'Qwen2.5-3B-Q4',
-    dev: 'Alibaba',
-    params: '3.1B',
-    ram: 1.8,
-    ramStr: '~1.8 GB',
-    context: 128000,
-    contextStr: '128K',
-    sizeQ4: '1.7 GB',
-    langs: '29+',
-    mmlu: 54,
-    gsm8k: 72,
-    humaneval: 45,
-    vision: 'No',
-    tool: 'Sí',
-    license: 'Apache 2.0',
-    inference: '15-25',
-    formats: 'GGUF, safetensors',
-    best: 'Código + Multilingüe',
-    bestEn: 'Code + Multilingual',
-    specialties: { razonamiento: 72, matematicas: 75, codigo: 82, idiomas: 85, vision: 0, general: 70 },
-    color: '#3b82f6',
-    colorLight: '#dbeafe'
-  },
-  qwen3: {
-    name: 'Qwen3-4B-Q4',
-    dev: 'Alibaba',
-    params: '4.0B',
-    ram: 2.6,
-    ramStr: '~2.6 GB',
-    context: 128000,
-    contextStr: '128K',
-    sizeQ4: '2.5 GB',
-    langs: '100+',
-    mmlu: 62,
-    gsm8k: 78,
-    humaneval: 48,
-    vision: 'Parcial',
-    tool: 'Sí',
-    license: 'Apache 2.0',
-    inference: '10-20',
-    formats: 'GGUF, safetensors',
-    best: 'Razonamiento + Math',
-    bestEn: 'Reasoning + Math',
-    specialties: { razonamiento: 88, matematicas: 85, codigo: 78, idiomas: 90, vision: 30, general: 82 },
-    color: '#8b5cf6',
-    colorLight: '#ede9fe'
-  },
-  llama: {
-    name: 'Llama 3.2-3B-Q4',
-    dev: 'Meta',
-    params: '3.05B',
-    ram: 1.9,
-    ramStr: '~1.9 GB',
-    context: 128000,
-    contextStr: '128K',
-    sizeQ4: '1.8 GB',
-    langs: '8',
-    mmlu: 51,
-    gsm8k: 65,
-    humaneval: 38,
-    vision: 'No',
-    tool: 'Sí',
-    license: 'Llama Community',
-    inference: '20-30',
-    formats: 'GGUF, safetensors',
-    best: 'Uso general + Edge',
-    bestEn: 'General + Edge',
-    specialties: { razonamiento: 65, matematicas: 62, codigo: 60, idiomas: 55, vision: 0, general: 85 },
-    color: '#10b981',
-    colorLight: '#d1fae5'
-  },
-  gemma: {
-    name: 'Gemma3-4B-Q4',
-    dev: 'Google',
-    params: '4.0B',
-    ram: 2.7,
-    ramStr: '~2.7 GB',
-    context: 28000,
-    contextStr: '8K-28K',
-    sizeQ4: '2.5 GB',
-    langs: '100+',
-    mmlu: 58,
-    gsm8k: 60,
-    humaneval: 35,
-    vision: 'Sí',
-    tool: 'Sí',
-    license: 'Gemma (uso comercial)',
-    inference: '10-18',
-    formats: 'GGUF, safetensors',
-    best: 'Visión + Multimodal',
-    bestEn: 'Vision + Multimodal',
-    specialties: { razonamiento: 60, matematicas: 55, codigo: 55, idiomas: 88, vision: 95, general: 72 },
-    color: '#f59e0b',
-    colorLight: '#fef3c7'
-  }
+  qwen2: { name:'Qwen2.5-3B-Q4', shortName:'Qwen2.5-3B', dev:'Alibaba', params:'3.1B', ram:1.8, sizeQ4GB:1.67, sizeQ4Str:'1.67 GB', context:128000, contextStr:'128K', langs:'29+', mmlu:54, gsm8k:72, humaneval:45, vision:'No', tool:'Sí', license:'Apache 2.0', inference:'15-25', formats:'GGUF, safetensors', best:'Código + Multilingüe', bestEn:'Code + Multilingual', specialties:{razonamiento:72,matematicas:75,codigo:82,idiomas:85,vision:0,general:70}, color:'#3b82f6', colorLight:'#dbeafe' },
+  qwen3: { name:'Qwen3-4B-Q4', shortName:'Qwen3-4B', dev:'Alibaba', params:'4.0B', ram:2.6, sizeQ4GB:2.50, sizeQ4Str:'2.50 GB', context:128000, contextStr:'128K', langs:'100+', mmlu:62, gsm8k:78, humaneval:48, vision:'Parcial', tool:'Sí', license:'Apache 2.0', inference:'10-20', formats:'GGUF, safetensors', best:'Razonamiento + Math', bestEn:'Reasoning + Math', specialties:{razonamiento:88,matematicas:85,codigo:78,idiomas:90,vision:30,general:82}, color:'#8b5cf6', colorLight:'#ede9fe' },
+  llama: { name:'Llama 3.2-3B-Q4', shortName:'Llama 3.2-3B', dev:'Meta', params:'3.05B', ram:1.9, sizeQ4GB:1.80, sizeQ4Str:'1.80 GB', context:128000, contextStr:'128K', langs:'8', mmlu:51, gsm8k:65, humaneval:38, vision:'No', tool:'Sí', license:'Llama Community', inference:'20-30', formats:'GGUF, safetensors', best:'Uso general + Edge', bestEn:'General + Edge', specialties:{razonamiento:65,matematicas:62,codigo:60,idiomas:55,vision:0,general:85}, color:'#10b981', colorLight:'#d1fae5' },
+  gemma: { name:'Gemma3-4B-Q4', shortName:'Gemma3-4B', dev:'Google', params:'4.0B', ram:2.7, sizeQ4GB:2.65, sizeQ4Str:'2.65 GB', context:28000, contextStr:'8K-28K', langs:'100+', mmlu:58, gsm8k:60, humaneval:35, vision:'Sí', tool:'Sí', license:'Gemma (uso comercial)', inference:'10-18', formats:'GGUF, safetensors', best:'Visión + Multimodal', bestEn:'Vision + Multimodal', specialties:{razonamiento:60,matematicas:55,codigo:55,idiomas:88,vision:95,general:72}, color:'#f59e0b', colorLight:'#fef3c7' }
 };
+
+const osData = {
+  android: { name:'Android 14', icon:'🤖', baseUsage:2.5, baseRange:'2.0 - 3.0 GB', buffer:0.5 },
+  ios: { name:'iOS 17/18', icon:'🍎', baseUsage:1.8, baseRange:'1.5 - 2.5 GB', buffer:0.4 }
+};
+
+const deviceRams = { 6:{total:6,label:'6 GB'}, 8:{total:8,label:'8 GB'}, 12:{total:12,label:'12 GB'} };
+
+let simState = { totalRam:6, os:'android', selectedModel:'qwen2', allModels:['qwen2','qwen3','llama','gemma'] };
 
 const i18n = {
   es: {
-    heroBadge: 'Análisis Técnico 2025',
-    heroTitle: 'Comparativa de Modelos',
-    heroSubtitle: 'IA Locales para Móvil',
-    heroDesc: 'Análisis detallado de RAM, contexto, especialidades y rendimiento real de los 4 modelos más populares en cuantización Q4.',
-    heroCTA1: '📊 Ver Gráficas',
-    heroCTA2: '🔄 Comparar Modelos',
-    statModels: 'Modelos',
-    statQuant: 'Cuantización',
-    statParams: 'Parámetros',
-    statContext: 'Contexto Máx',
-    qwen2Desc: 'Open source, excel en código y matemáticas',
-    qwen3Desc: 'Generación 2025, reasoning mejorado',
-    llamaDesc: 'Propósito general, optimizado para edge',
-    gemmaDesc: 'Multimodal, eficiente para visión',
-    ramLabel: 'RAM Q4',
-    contextLabel: 'Contexto',
-    langLabel: 'Idiomas',
-    chartsTitle: '📊 Gráficas Comparativas',
-    chartsSubtitle: 'Análisis visual de rendimiento y consumo de recursos',
-    ramChartTitle: 'Uso Real de RAM (Q4)',
-    ramChartDesc: 'Memoria consumida durante inferencia en dispositivo móvil',
-    contextChartTitle: 'Ventana de Contexto',
-    contextChartDesc: 'Tokens máximos de contexto soportados',
-    radarTitle: 'Habilidades por Especialidad',
-    radarDesc: 'Comparación de fortalezas en diferentes áreas',
-    benchTitle: 'Puntuación Benchmarks',
-    benchDesc: 'MMLU, GSM8K y HumanEval (valores aproximados)',
-    mobileTitle: '📱 Compatibilidad Móvil',
-    mobileQwen2: 'Funciona en móviles con 4GB+ RAM. Ideal para dispositivos gama media. Inferencia ~15-25 tok/s.',
-    mobileQwen3: 'Requiere 6GB+ RAM recomendado. Mejor rendimiento en gama alta. Inferencia ~10-20 tok/s.',
-    mobileLlama: 'Funciona en móviles con 4GB+ RAM. Muy optimizado para edge. Inferencia ~20-30 tok/s.',
-    mobileGemma: 'Requiere 6GB+ RAM. Multimodal necesita más recursos. Inferencia ~10-18 tok/s.',
-    compareTitle: '🔄 Comparador de Modelos',
-    compareSubtitle: 'Selecciona dos modelos para comparar especificaciones',
-    selectModel1: 'Modelo A',
-    selectModel2: 'Modelo B',
-    bestUseTitle: '🎯 Mejor Uso por Escenario',
-    bestUseSubtitle: '¿Qué modelo elegir según tu necesidad?',
-    scenarioMobile: 'Móvil / Edge',
-    scenarioCoding: 'Desarrollo / Código',
-    scenarioMath: 'Matemáticas / Ciencia',
-    scenarioVision: 'Visión / Multimodal',
-    whyLlama: 'Mayor velocidad, menor consumo RAM',
-    whyQwen2Edge: 'Gran soporte multilingüe, buen balance',
-    whyQwen2Code: 'Excelente en HumanEval, generación de código',
-    whyQwen3Code: 'Reasoning mejorado para debugging',
-    whyQwen3Math: 'Razonamiento matemático superior',
-    whyQwen2Math: 'Buen rendimiento en GSM8K',
-    whyGemmaVision: 'Diseñado nativamente para visión+texto',
-    whyQwen3Vision: 'Soporte multimodal en desarrollo',
-    specsTitle: '📋 Especificaciones Técnicas Completas',
-    specsSubtitle: 'Tabla detallada de todos los parámetros',
-    specCol: 'Especificación',
-    specDev: 'Desarrollador',
-    specParams: 'Parámetros',
-    specArch: 'Arquitectura',
-    specRAM: 'RAM Q4 (real)',
-    specSizeQ4: 'Tamaño Q4',
-    specContext: 'Contexto Máx',
-    specLangs: 'Idiomas',
-    specVision: 'Soporte Visión',
-    specTool: 'Tool Calling',
-    specLicense: 'Licencia',
-    specInference: 'Vel. Inferencia* (tok/s)',
-    specFormat: 'Formatos',
-    specBest: 'Mejor Para',
-    bestQwen2: 'Código + Multilingüe',
-    bestQwen3: 'Razonamiento + Math',
-    bestLlama: 'Uso general + Edge',
-    bestGemma: 'Visión + Multimodal',
-    winnerTitle: '🏆 Veredicto Final',
-    winnerMobile: 'Para Móvil / Dispositivos Edge',
-    winnerMobileDesc: 'El más eficiente en RAM con el mejor rendimiento en dispositivos de gama media. Inferencia más rápida.',
-    winnerGeneral: 'Más General / Capaz',
-    winnerGeneralDesc: 'Mejores puntuaciones en benchmarks de razonamiento y matemáticas. Soporte 100+ idiomas.',
-    winnerCode: 'Para Programación',
-    winnerCodeDesc: 'Mejor puntuación en HumanEval. Excelente generación de código en múltiples lenguajes.',
-    winnerVision: 'Para Visión / Multimodal',
-    winnerVisionDesc: 'Único con soporte nativo multimodal. Ideal para análisis de imágenes + texto.',
-    footerNote: 'Datos basados en especificaciones oficiales de los desarrolladores y pruebas de la comunidad (2025).',
-    footerDisclaimer: 'Los valores de rendimiento son aproximados y pueden variar según el hardware, cuantización y framework utilizado.',
-    compRAM: 'RAM Q4 (real)',
-    compSize: 'Tamaño modelo Q4',
-    compContext: 'Contexto máximo',
-    compLangs: 'Soporte de idiomas',
-    compMMLU: 'MMLU (conocimiento general)',
-    compGSM8K: 'GSM8K (matemáticas)',
-    compHumanEval: 'HumanEval (código)',
-    compVision: 'Soporte visión',
-    compTool: 'Tool calling',
-    compInference: 'Vel. inferencia (tok/s)',
-    compBest: 'Mejor para',
-    compWinner: ' Ganador',
-    compTie: ' Empate'
+    heroBadge:'Análisis Técnico 2025', heroTitle:'Comparativa de Modelos', heroSubtitle:'IA Locales para Móvil',
+    heroDesc:'Análisis detallado de RAM, contexto, especialidades y rendimiento real de los 4 modelos más populares en cuantización Q4.',
+    heroCTA1:'📊 Ver Gráficas', heroCTA2:'📱 Simulador RAM', heroCTA3:'🔄 Comparar Modelos',
+    statModels:'Modelos', statQuant:'Cuantización', statParams:'Parámetros', statContext:'Contexto Máx',
+    qwen2Desc:'Open source, excel en código y matemáticas', qwen3Desc:'Generación 2025, reasoning mejorado',
+    llamaDesc:'Propósito general, optimizado para edge', gemmaDesc:'Multimodal, eficiente para visión',
+    ramLabel:'RAM Q4', contextLabel:'Contexto', langLabel:'Idiomas',
+    chartsTitle:'📊 Gráficas Comparativas', chartsSubtitle:'Análisis visual de rendimiento y consumo de recursos',
+    ramChartTitle:'Uso Real de RAM (Q4)', ramChartDesc:'Memoria consumida durante inferencia en dispositivo móvil',
+    contextChartTitle:'Ventana de Contexto', contextChartDesc:'Tokens máximos de contexto soportados',
+    radarTitle:'Habilidades por Especialidad', radarDesc:'Comparación de fortalezas en diferentes áreas',
+    benchTitle:'Puntuación Benchmarks', benchDesc:'MMLU, GSM8K y HumanEval (valores aproximados)',
+    simTitle:'📱 Simulador de Carga de Modelo',
+    simSubtitle:'Simula la carga de un modelo en diferentes dispositivos con RAM real disponible (descontando el sistema operativo)',
+    simStep1:'Selecciona la RAM de tu dispositivo', simStep2:'Selecciona el Sistema Operativo',
+    simStep3:'Selecciona el modelo a cargar', simMidRange:'Gama Media', simHighEnd:'Gama Alta', simFlagship:'Flagship',
+    simAndroidUsage:'~2.5 GB uso sistema', simIOSUsage:'~1.8 GB uso sistema',
+    simResultTitle:'Resultado de la Simulación', simResultAvailable:'RAM Disponible',
+    simResultModelSize:'Tamaño del Modelo', simResultBuffer:'Buffer de Seguridad',
+    simResultRemaining:'RAM Restante', simResultFree:'Libre para contexto',
+    simResultStatus:'Estado', simResultFits:'CABE', simResultNoFits:'NO CABE',
+    simResultEdge:'MUY AJUSTADO', simResultOK:'CÓMODO',
+    simCanLoad:'El modelo se puede cargar correctamente en este dispositivo.',
+    simCannotLoad:'El modelo NO se puede cargar en este dispositivo. No hay suficiente RAM disponible.',
+    simTight:'El modelo entra justo. Habrá poca RAM para contexto adicional. Puede haber ralentizaciones.',
+    simComfortable:'El modelo se carga con holgura. Buena RAM disponible para contexto largo.',
+    simContextTokens:'Tokens de contexto adicionales posibles',
+    simAllModelsTitle:'Todos los modelos en este dispositivo', simModel:'Modelo',
+    simFits:'Cabe', simNoFits:'No cabe',
+    simChartsTitle:'📊 Simulación en Todos los Dispositivos',
+    simChartsSubtitle:'Vista completa de qué modelos caben en cada configuración de RAM',
+    simNotesTitle:'Notas sobre el cálculo de RAM:',
+    simNoteAndroid:'Android 14: Uso base del sistema ~2.5GB (system_server, SurfaceFlinger, apps en background, ZRAM, GPU shared memory).',
+    simNoteIOS:'iOS 17/18: Uso base ~1.8GB (kernel, SpringBoard, servicios del sistema, cache). iOS gestiona memoria más eficientemente.',
+    simNoteBuffer:'Buffer de seguridad: Se reserva 0.5GB adicional para el OS para evitar OOM (Out of Memory).',
+    simNoteModelSize:'Tamaño del modelo: Peso del archivo GGUF Q4_K_M + memoria para KV cache y contexto durante inferencia.',
+    simNoteContextExtra:'Contexto extra: La RAM adicional necesaria para tokens de contexto (aprox. 1-2MB cada 4K tokens).',
+    mobileTitle:'📱 Compatibilidad Móvil',
+    mobileQwen2:'Funciona en móviles con 4GB+ RAM. Ideal para dispositivos gama media. Inferencia ~15-25 tok/s.',
+    mobileQwen3:'Requiere 6GB+ RAM recomendado. Mejor rendimiento en gama alta. Inferencia ~10-20 tok/s.',
+    mobileLlama:'Funciona en móviles con 4GB+ RAM. Muy optimizado para edge. Inferencia ~20-30 tok/s.',
+    mobileGemma:'Requiere 6GB+ RAM. Multimodal necesita más recursos. Inferencia ~10-18 tok/s.',
+    compareTitle:'🔄 Comparador de Modelos', compareSubtitle:'Selecciona dos modelos para comparar especificaciones',
+    selectModel1:'Modelo A', selectModel2:'Modelo B',
+    bestUseTitle:'🎯 Mejor Uso por Escenario', bestUseSubtitle:'¿Qué modelo elegir según tu necesidad?',
+    scenarioMobile:'Móvil / Edge', scenarioCoding:'Desarrollo / Código',
+    scenarioMath:'Matemáticas / Ciencia', scenarioVision:'Visión / Multimodal',
+    whyLlama:'Mayor velocidad, menor consumo RAM', whyQwen2Edge:'Gran soporte multilingüe, buen balance',
+    whyQwen2Code:'Excelente en HumanEval, generación de código', whyQwen3Code:'Reasoning mejorado para debugging',
+    whyQwen3Math:'Razonamiento matemático superior', whyQwen2Math:'Buen rendimiento en GSM8K',
+    whyGemmaVision:'Diseñado nativamente para visión+texto', whyQwen3Vision:'Soporte multimodal en desarrollo',
+    specsTitle:'📋 Especificaciones Técnicas Completas', specsSubtitle:'Tabla detallada de todos los parámetros',
+    specCol:'Especificación', specDev:'Desarrollador', specParams:'Parámetros', specArch:'Arquitectura',
+    specRAM:'RAM Q4 (real)', specSizeQ4:'Tamaño Q4 GGUF', specContext:'Contexto Máx', specLangs:'Idiomas',
+    specVision:'Soporte Visión', specTool:'Tool Calling', specLicense:'Licencia',
+    specInference:'Vel. Inferencia* (tok/s)', specFormat:'Formatos', specBest:'Mejor Para',
+    bestQwen2:'Código + Multilingüe', bestQwen3:'Razonamiento + Math',
+    bestLlama:'Uso general + Edge', bestGemma:'Visión + Multimodal',
+    licenseApache:'Apache 2.0', licenseLlama:'Llama Community', licenseGemma:'Gemma (uso comercial)',
+    winnerTitle:'🏆 Veredicto Final',
+    winnerMobile:'Para Móvil / Dispositivos Edge',
+    winnerMobileDesc:'El más eficiente en RAM con el mejor rendimiento en dispositivos de gama media. Inferencia más rápida.',
+    winnerGeneral:'Más General / Capaz',
+    winnerGeneralDesc:'Mejores puntuaciones en benchmarks de razonamiento y matemáticas. Soporte 100+ idiomas.',
+    winnerCode:'Para Programación',
+    winnerCodeDesc:'Mejor puntuación en HumanEval. Excelente generación de código en múltiples lenguajes.',
+    winnerVision:'Para Visión / Multimodal',
+    winnerVisionDesc:'Único con soporte nativo multimodal. Ideal para análisis de imágenes + texto.',
+    footerNote:'Datos basados en especificaciones oficiales de los desarrolladores y pruebas de la comunidad (2025).',
+    footerDisclaimer:'Los valores de rendimiento son aproximados y pueden variar según el hardware, cuantización y framework utilizado.',
+    compSize:'Tamaño modelo Q4', compContext:'Contexto máximo', compLangs:'Soporte de idiomas',
+    compMMLU:'MMLU (conocimiento general)', compGSM8K:'GSM8K (matemáticas)',
+    compHumanEval:'HumanEval (código)', compVision:'Soporte visión', compTool:'Tool calling',
+    compInference:'Vel. inferencia (tok/s)', compBest:'Mejor para', compWinner:'🏆 Ganador', compTie:'🤝 Empate'
   },
   en: {
-    heroBadge: 'Technical Analysis 2025',
-    heroTitle: 'Model Comparison',
-    heroSubtitle: 'Local AI for Mobile',
-    heroDesc: 'Detailed analysis of RAM, context, specialties and real performance of the 4 most popular Q4 quantized models.',
-    heroCTA1: '📊 View Charts',
-    heroCTA2: '🔄 Compare Models',
-    statModels: 'Models',
-    statQuant: 'Quantization',
-    statParams: 'Parameters',
-    statContext: 'Max Context',
-    qwen2Desc: 'Open source, excels in code and math',
-    qwen3Desc: '2025 generation, improved reasoning',
-    llamaDesc: 'General purpose, edge-optimized',
-    gemmaDesc: 'Multimodal, vision-efficient',
-    ramLabel: 'RAM Q4',
-    contextLabel: 'Context',
-    langLabel: 'Languages',
-    chartsTitle: '📊 Comparative Charts',
-    chartsSubtitle: 'Visual analysis of performance and resource consumption',
-    ramChartTitle: 'Real RAM Usage (Q4)',
-    ramChartDesc: 'Memory consumed during inference on mobile device',
-    contextChartTitle: 'Context Window',
-    contextChartDesc: 'Maximum context tokens supported',
-    radarTitle: 'Specialty Skills',
-    radarDesc: 'Comparison of strengths in different areas',
-    benchTitle: 'Benchmark Scores',
-    benchDesc: 'MMLU, GSM8K and HumanEval (approximate values)',
-    mobileTitle: '📱 Mobile Compatibility',
-    mobileQwen2: 'Works on phones with 4GB+ RAM. Ideal for mid-range devices. Inference ~15-25 tok/s.',
-    mobileQwen3: '6GB+ RAM recommended. Best performance on flagship devices. Inference ~10-20 tok/s.',
-    mobileLlama: 'Works on phones with 4GB+ RAM. Highly optimized for edge. Inference ~20-30 tok/s.',
-    mobileGemma: 'Requires 6GB+ RAM. Multimodal needs more resources. Inference ~10-18 tok/s.',
-    compareTitle: '🔄 Model Comparator',
-    compareSubtitle: 'Select two models to compare specifications',
-    selectModel1: 'Model A',
-    selectModel2: 'Model B',
-    bestUseTitle: '🎯 Best Use by Scenario',
-    bestUseSubtitle: 'Which model to choose based on your needs?',
-    scenarioMobile: 'Mobile / Edge',
-    scenarioCoding: 'Development / Code',
-    scenarioMath: 'Math / Science',
-    scenarioVision: 'Vision / Multimodal',
-    whyLlama: 'Highest speed, lowest RAM usage',
-    whyQwen2Edge: 'Great multilingual support, good balance',
-    whyQwen2Code: 'Excellent in HumanEval, code generation',
-    whyQwen3Code: 'Improved reasoning for debugging',
-    whyQwen3Math: 'Superior mathematical reasoning',
-    whyQwen2Math: 'Good performance on GSM8K',
-    whyGemmaVision: 'Natively designed for vision+text',
-    whyQwen3Vision: 'Multimodal support in development',
-    specsTitle: ' Complete Technical Specifications',
-    specsSubtitle: 'Detailed table of all parameters',
-    specCol: 'Specification',
-    specDev: 'Developer',
-    specParams: 'Parameters',
-    specArch: 'Architecture',
-    specRAM: 'RAM Q4 (real)',
-    specSizeQ4: 'Q4 Size',
-    specContext: 'Max Context',
-    specLangs: 'Languages',
-    specVision: 'Vision Support',
-    specTool: 'Tool Calling',
-    specLicense: 'License',
-    specInference: 'Inference Speed* (tok/s)',
-    specFormat: 'Formats',
-    specBest: 'Best For',
-    bestQwen2: 'Code + Multilingual',
-    bestQwen3: 'Reasoning + Math',
-    bestLlama: 'General + Edge',
-    bestGemma: 'Vision + Multimodal',
-    winnerTitle: '🏆 Final Verdict',
-    winnerMobile: 'For Mobile / Edge Devices',
-    winnerMobileDesc: 'Most efficient in RAM with the best performance on mid-range devices. Fastest inference.',
-    winnerGeneral: 'Most General / Capable',
-    winnerGeneralDesc: 'Best scores in reasoning and math benchmarks. Support for 100+ languages.',
-    winnerCode: 'For Programming',
-    winnerCodeDesc: 'Best HumanEval score. Excellent code generation across multiple languages.',
-    winnerVision: 'For Vision / Multimodal',
-    winnerVisionDesc: 'Only one with native multimodal support. Ideal for image + text analysis.',
-    footerNote: 'Data based on official developer specifications and community testing (2025).',
-    footerDisclaimer: 'Performance values are approximate and may vary depending on hardware, quantization and framework used.',
-    compRAM: 'RAM Q4 (real)',
-    compSize: 'Q4 Model Size',
-    compContext: 'Max Context',
-    compLangs: 'Language Support',
-    compMMLU: 'MMLU (general knowledge)',
-    compGSM8K: 'GSM8K (mathematics)',
-    compHumanEval: 'HumanEval (code)',
-    compVision: 'Vision Support',
-    compTool: 'Tool Calling',
-    compInference: 'Inference Speed (tok/s)',
-    compBest: 'Best For',
-    compWinner: '🏆 Winner',
-    compTie: '🤝 Tie'
+    heroBadge:'Technical Analysis 2025', heroTitle:'Model Comparison', heroSubtitle:'Local AI for Mobile',
+    heroDesc:'Detailed analysis of RAM, context, specialties and real performance of the 4 most popular Q4 quantized models.',
+    heroCTA1:'📊 View Charts', heroCTA2:'📱 RAM Simulator', heroCTA3:'🔄 Compare Models',
+    statModels:'Models', statQuant:'Quantization', statParams:'Parameters', statContext:'Max Context',
+    qwen2Desc:'Open source, excels in code and math', qwen3Desc:'2025 generation, improved reasoning',
+    llamaDesc:'General purpose, edge-optimized', gemmaDesc:'Multimodal, vision-efficient',
+    ramLabel:'RAM Q4', contextLabel:'Context', langLabel:'Languages',
+    chartsTitle:'📊 Comparative Charts', chartsSubtitle:'Visual analysis of performance and resource consumption',
+    ramChartTitle:'Real RAM Usage (Q4)', ramChartDesc:'Memory consumed during inference on mobile device',
+    contextChartTitle:'Context Window', contextChartDesc:'Maximum context tokens supported',
+    radarTitle:'Specialty Skills', radarDesc:'Comparison of strengths in different areas',
+    benchTitle:'Benchmark Scores', benchDesc:'MMLU, GSM8K and HumanEval (approximate values)',
+    simTitle:'📱 Model Load Simulator',
+    simSubtitle:'Simulate model loading on different devices with real available RAM (after deducting OS overhead)',
+    simStep1:'Select your device RAM', simStep2:'Select Operating System',
+    simStep3:'Select model to load', simMidRange:'Mid-range', simHighEnd:'High-end', simFlagship:'Flagship',
+    simAndroidUsage:'~2.5 GB system usage', simIOSUsage:'~1.8 GB system usage',
+    simResultTitle:'Simulation Result', simResultAvailable:'Available RAM',
+    simResultModelSize:'Model Size', simResultBuffer:'Safety Buffer',
+    simResultRemaining:'Remaining RAM', simResultFree:'Free for context',
+    simResultStatus:'Status', simResultFits:'FITS', simResultNoFits:'NO FIT',
+    simResultEdge:'TIGHT', simResultOK:'COMFORTABLE',
+    simCanLoad:'The model can be loaded correctly on this device.',
+    simCannotLoad:'The model CANNOT be loaded on this device. Not enough available RAM.',
+    simTight:'The model fits tightly. Little RAM left for additional context. May cause slowdowns.',
+    simComfortable:'The model loads comfortably. Good RAM available for long context.',
+    simContextTokens:'Additional context tokens possible',
+    simAllModelsTitle:'All models on this device', simModel:'Model',
+    simFits:'Fits', simNoFits:'No fit',
+    simChartsTitle:'📊 Simulation on All Devices',
+    simChartsSubtitle:'Complete view of which models fit in each RAM configuration',
+    simNotesTitle:'Notes on RAM calculation:',
+    simNoteAndroid:'Android 14: Base system usage ~2.5GB (system_server, SurfaceFlinger, background apps, ZRAM, GPU shared memory).',
+    simNoteIOS:'iOS 17/18: Base usage ~1.8GB (kernel, SpringBoard, system services, cache). iOS manages memory more efficiently.',
+    simNoteBuffer:'Safety buffer: 0.5GB reserved for the OS to prevent OOM (Out of Memory).',
+    simNoteModelSize:'Model size: GGUF Q4_K_M file weight + memory for KV cache and context during inference.',
+    simNoteContextExtra:'Extra context: Additional RAM needed for context tokens (approx. 1-2MB per 4K tokens).',
+    mobileTitle:'📱 Mobile Compatibility',
+    mobileQwen2:'Works on phones with 4GB+ RAM. Ideal for mid-range devices. Inference ~15-25 tok/s.',
+    mobileQwen3:'6GB+ RAM recommended. Best performance on flagship devices. Inference ~10-20 tok/s.',
+    mobileLlama:'Works on phones with 4GB+ RAM. Highly optimized for edge. Inference ~20-30 tok/s.',
+    mobileGemma:'Requires 6GB+ RAM. Multimodal needs more resources. Inference ~10-18 tok/s.',
+    compareTitle:'🔄 Model Comparator', compareSubtitle:'Select two models to compare specifications',
+    selectModel1:'Model A', selectModel2:'Model B',
+    bestUseTitle:'🎯 Best Use by Scenario', bestUseSubtitle:'Which model to choose based on your needs?',
+    scenarioMobile:'Mobile / Edge', scenarioCoding:'Development / Code',
+    scenarioMath:'Math / Science', scenarioVision:'Vision / Multimodal',
+    whyLlama:'Highest speed, lowest RAM usage', whyQwen2Edge:'Great multilingual support, good balance',
+    whyQwen2Code:'Excellent in HumanEval, code generation', whyQwen3Code:'Improved reasoning for debugging',
+    whyQwen3Math:'Superior mathematical reasoning', whyQwen2Math:'Good performance on GSM8K',
+    whyGemmaVision:'Natively designed for vision+text', whyQwen3Vision:'Multimodal support in development',
+    specsTitle:'📋 Complete Technical Specifications', specsSubtitle:'Detailed table of all parameters',
+    specCol:'Specification', specDev:'Developer', specParams:'Parameters', specArch:'Architecture',
+    specRAM:'RAM Q4 (real)', specSizeQ4:'Q4 GGUF Size', specContext:'Max Context', specLangs:'Languages',
+    specVision:'Vision Support', specTool:'Tool Calling', specLicense:'License',
+    specInference:'Inference Speed* (tok/s)', specFormat:'Formats', specBest:'Best For',
+    bestQwen2:'Code + Multilingual', bestQwen3:'Reasoning + Math',
+    bestLlama:'General + Edge', bestGemma:'Vision + Multimodal',
+    licenseApache:'Apache 2.0', licenseLlama:'Llama Community', licenseGemma:'Gemma (commercial use)',
+    winnerTitle:'🏆 Final Verdict',
+    winnerMobile:'For Mobile / Edge Devices',
+    winnerMobileDesc:'Most efficient in RAM with the best performance on mid-range devices. Fastest inference.',
+    winnerGeneral:'Most General / Capable',
+    winnerGeneralDesc:'Best scores in reasoning and math benchmarks. Support for 100+ languages.',
+    winnerCode:'For Programming',
+    winnerCodeDesc:'Best HumanEval score. Excellent code generation across multiple languages.',
+    winnerVision:'For Vision / Multimodal',
+    winnerVisionDesc:'Only one with native multimodal support. Ideal for image + text analysis.',
+    footerNote:'Data based on official developer specifications and community testing (2025).',
+    footerDisclaimer:'Performance values are approximate and may vary depending on hardware, quantization and framework used.',
+    compSize:'Q4 Model Size', compContext:'Max Context', compLangs:'Language Support',
+    compMMLU:'MMLU (general knowledge)', compGSM8K:'GSM8K (mathematics)',
+    compHumanEval:'HumanEval (code)', compVision:'Vision Support', compTool:'Tool Calling',
+    compInference:'Inference Speed (tok/s)', compBest:'Best For', compWinner:'🏆 Winner', compTie:'🤝 Tie'
   }
 };
 
@@ -740,102 +545,257 @@ let chartInstances = {};
 
 function setLang(lang) {
   currentLang = lang;
-  document.getElementById('btnES').className = `px-3 py-1 rounded-lg text-sm font-semibold transition-all ${lang === 'es' ? 'bg-white text-purple-700 shadow' : 'text-slate-600'}`;
-  document.getElementById('btnEN').className = `px-3 py-1 rounded-lg text-sm font-semibold transition-all ${lang === 'en' ? 'bg-white text-purple-700 shadow' : 'text-slate-600'}`;
+  var btnES = document.getElementById('btnES');
+  var btnEN = document.getElementById('btnEN');
+  btnES.className = 'px-3 py-1 rounded-lg text-sm font-semibold transition-all ' + (lang === 'es' ? 'bg-white text-purple-700 shadow' : 'text-slate-600');
+  btnEN.className = 'px-3 py-1 rounded-lg text-sm font-semibold transition-all ' + (lang === 'en' ? 'bg-white text-purple-700 shadow' : 'text-slate-600');
   
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (i18n[lang][key]) el.textContent = i18n[lang][key];
-  });
-  
+  var elements = document.querySelectorAll('[data-i18n]');
+  for (var i = 0; i < elements.length; i++) {
+    var key = elements[i].getAttribute('data-i18n');
+    if (i18n[lang] && i18n[lang][key]) {
+      elements[i].textContent = i18n[lang][key];
+    }
+  }
   updateComparison();
+  runSimulation();
   updateCharts();
 }
 
-function updateComparison() {
-  const selA = document.getElementById('selectA').value;
-  const selB = document.getElementById('selectB').value;
-  const mA = modelsData[selA];
-  const mB = modelsData[selB];
-  const L = i18n[currentLang];
+function selectRam(gb) {
+  simState.totalRam = gb;
+  var btns = document.querySelectorAll('.ram-device-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  document.getElementById('ram' + gb).classList.add('active');
+  runSimulation();
+}
+
+function selectOS(os) {
+  simState.os = os;
+  var btns = document.querySelectorAll('.os-badge');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  document.getElementById(os === 'android' ? 'osAndroid' : 'osIOS').classList.add('active');
+  runSimulation();
+}
+
+function selectModel(modelKey) {
+  simState.selectedModel = modelKey;
+  var btns = document.querySelectorAll('.model-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  var modelBtnId = 'model' + modelKey.charAt(0).toUpperCase() + modelKey.slice(1);
+  var el = document.getElementById(modelBtnId);
+  if (el) el.classList.add('active');
+  runSimulation();
+}
+
+function runSimulation() {
+  var L = i18n[currentLang];
+  var totalRam = simState.totalRam;
+  var os = osData[simState.os];
+  var model = modelsData[simState.selectedModel];
   
-  const specs = [
-    { key: 'dev', labelKey: 'specDev' },
-    { key: 'params', labelKey: 'specParams' },
-    { key: 'ramStr', labelKey: 'compRAM', numeric: true, higher: false },
-    { key: 'contextStr', labelKey: 'compContext', numeric: true, higher: true },
-    { key: 'sizeQ4', labelKey: 'compSize' },
-    { key: 'langs', labelKey: 'compLangs' },
-    { key: 'mmlu', labelKey: 'compMMLU', numeric: true, higher: true },
-    { key: 'gsm8k', labelKey: 'compGSM8K', numeric: true, higher: true },
-    { key: 'humaneval', labelKey: 'compHumanEval', numeric: true, higher: true },
-    { key: 'vision', labelKey: 'compVision' },
-    { key: 'tool', labelKey: 'compTool' },
-    { key: 'inference', labelKey: 'compInference' },
-    { key: 'best', labelKey: 'compBest' },
+  var availableRam = totalRam - os.baseUsage - os.buffer;
+  var fits = availableRam >= model.sizeQ4GB;
+  var remaining = availableRam - model.sizeQ4GB;
+  var contextTokens = fits && remaining > 0 ? Math.floor((remaining * 1024) / 1.5) : 0;
+  
+  var statusIcon, statusText, statusColor, statusBg, descText;
+  if (!fits) {
+    statusIcon = '❌';
+    statusText = L.simResultNoFits;
+    statusColor = '#ef4444';
+    statusBg = '#fef2f2';
+    descText = L.simCannotLoad;
+  } else if (remaining < 0.5) {
+    statusIcon = '⚠️';
+    statusText = L.simResultEdge;
+    statusColor = '#f59e0b';
+    statusBg = '#fffbeb';
+    descText = L.simTight;
+  } else {
+    statusIcon = '✅';
+    statusText = L.simResultOK;
+    statusColor = '#10b981';
+    statusBg = '#f0fdf4';
+    descText = L.simComfortable;
+  }
+  
+  var osWidth = (os.baseUsage / totalRam) * 100;
+  var bufferWidth = (os.buffer / totalRam) * 100;
+  var modelWidth = fits ? (model.sizeQ4GB / totalRam) * 100 : (model.sizeQ4GB / totalRam) * 100;
+  var remainingWidth = fits && remaining > 0 ? (remaining / totalRam) * 100 : 0;
+  
+  var html = '';
+  html += '<div class="border-2 border-slate-200 rounded-2xl overflow-hidden">';
+  html += '<div class="p-6 bg-slate-50">';
+  html += '<div class="flex items-center justify-between mb-3">';
+  html += '<h4 class="font-bold text-sm text-slate-600">' + L.simResultTitle + '</h4>';
+  html += '<span class="badge" style="background:' + statusBg + ';color:' + statusColor + ';font-size:13px;padding:4px 14px;">' + statusIcon + ' ' + statusText + '</span>';
+  html += '</div>';
+  
+  html += '<div class="ram-bar-container bg-slate-200 flex">';
+  html += '<div class="ram-bar-segment bg-slate-400" style="width:' + osWidth + '%"><span class="text-[10px] font-bold text-white truncate px-1">' + os.name + ' ' + os.baseUsage + 'GB</span></div>';
+  html += '<div class="ram-bar-segment bg-slate-300" style="width:' + bufferWidth + '%"><span class="text-[10px] font-bold text-slate-600 truncate px-1">' + os.buffer + 'GB</span></div>';
+  if (fits) {
+    html += '<div class="ram-bar-segment" style="width:' + modelWidth + '%;background:' + model.color + '"><span class="text-[10px] font-bold text-white truncate px-1">' + model.shortName + ' ' + model.sizeQ4Str + '</span></div>';
+  } else {
+    html += '<div class="ram-bar-segment bg-red-400 animate-pulse" style="width:' + modelWidth + '%"><span class="text-[10px] font-bold text-white truncate px-1">' + model.shortName + ' ' + model.sizeQ4Str + '</span></div>';
+  }
+  if (fits && remaining > 0) {
+    html += '<div class="ram-bar-segment bg-emerald-400" style="width:' + remainingWidth + '%"><span class="text-[10px] font-bold text-white truncate px-1">' + remaining.toFixed(2) + ' GB</span></div>';
+  }
+  html += '</div>';
+  
+  html += '<div class="flex flex-wrap gap-3 mt-3">';
+  html += '<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-slate-400"></div><span class="text-xs text-slate-600">' + os.name + ' (' + os.baseUsage + ' GB)</span></div>';
+  html += '<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-slate-300"></div><span class="text-xs text-slate-600">Buffer (' + os.buffer + ' GB)</span></div>';
+  html += '<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded" style="background:' + model.color + '"></div><span class="text-xs text-slate-600">' + model.shortName + ' (' + model.sizeQ4Str + ')</span></div>';
+  if (fits && remaining > 0) {
+    html += '<div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-emerald-400"></div><span class="text-xs text-slate-600">' + L.simResultFree + ' (' + remaining.toFixed(2) + ' GB)</span></div>';
+  }
+  html += '</div></div>';
+  
+  html += '<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6">';
+  html += '<div class="text-center p-3 bg-slate-50 rounded-xl"><div class="text-xs text-slate-500 mb-1">' + L.simResultAvailable + '</div><div class="text-xl font-bold text-slate-800">' + availableRam.toFixed(2) + ' GB</div><div class="text-xs text-slate-400">' + totalRam + ' - ' + os.baseUsage + ' - ' + os.buffer + '</div></div>';
+  html += '<div class="text-center p-3 rounded-xl" style="background:' + model.colorLight + '"><div class="text-xs text-slate-500 mb-1">' + L.simResultModelSize + '</div><div class="text-xl font-bold" style="color:' + model.color + '">' + model.sizeQ4Str + '</div><div class="text-xs text-slate-400">Q4_K_M GGUF</div></div>';
+  html += '<div class="text-center p-3 bg-slate-50 rounded-xl"><div class="text-xs text-slate-500 mb-1">' + L.simResultRemaining + '</div><div class="text-xl font-bold ' + (fits ? 'text-emerald-600' : 'text-red-600') + '">' + (fits ? remaining.toFixed(2) : 'N/A') + ' GB</div><div class="text-xs text-slate-400">' + (fits ? contextTokens.toLocaleString() + ' tok' : '-') + '</div></div>';
+  html += '<div class="text-center p-3 rounded-xl" style="background:' + statusBg + '"><div class="text-xs text-slate-500 mb-1">' + L.simResultStatus + '</div><div class="text-3xl">' + statusIcon + '</div><div class="text-xs font-semibold mt-1" style="color:' + statusColor + '">' + statusText + '</div></div>';
+  html += '</div>';
+  
+  html += '<div class="px-6 pb-6"><div class="p-4 rounded-xl text-sm" style="background:' + statusBg + '">';
+  html += '<p style="color:' + statusColor + '" class="font-semibold">' + statusIcon + ' ' + descText + '</p>';
+  if (fits && remaining > 0) {
+    html += '<p class="text-xs text-slate-500 mt-1">' + L.simContextTokens + ': ~' + contextTokens.toLocaleString() + ' tokens</p>';
+  }
+  html += '</div></div>';
+  
+  html += '<div class="border-t border-slate-200 p-6">';
+  html += '<h4 class="font-bold text-sm text-slate-600 mb-4">' + L.simAllModelsTitle + ' (' + totalRam + 'GB RAM - ' + os.name + ')</h4>';
+  html += '<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">';
+  
+  var modelKeys = simState.allModels;
+  for (var m = 0; m < modelKeys.length; m++) {
+    var mKey = modelKeys[m];
+    var mdl = modelsData[mKey];
+    var mFits = availableRam >= mdl.sizeQ4GB;
+    var mRemaining = availableRam - mdl.sizeQ4GB;
+    var mActive = mKey === simState.selectedModel;
+    
+    html += '<div class="p-3 rounded-xl text-center cursor-pointer transition-all hover:shadow-md" ';
+    html += 'style="background:' + (mActive ? mdl.colorLight : '#f8fafc') + ';border:2px solid ' + (mActive ? mdl.color : '#e2e8f0') + ';' + (mActive ? 'box-shadow:0 4px 12px rgba(0,0,0,0.08);' : '') + '" ';
+    html += 'onclick="selectModel(\'' + mKey + '\')">';
+    html += '<div class="font-bold text-sm" style="color:' + mdl.color + '">' + mdl.shortName + '</div>';
+    html += '<div class="text-xs text-slate-500">' + mdl.sizeQ4Str + '</div>';
+    html += '<div class="mt-2">';
+    if (mFits) {
+      html += '<span class="badge bg-emerald-100 text-emerald-700">' + L.simFits + '</span>';
+      html += '<div class="text-[10px] text-slate-400 mt-0.5">' + mRemaining.toFixed(2) + ' GB ' + L.simResultFree + '</div>';
+    } else {
+      html += '<span class="badge bg-red-100 text-red-700">' + L.simNoFits + '</span>';
+      html += '<div class="text-[10px] text-slate-400 mt-0.5">-' + Math.abs(mRemaining).toFixed(2) + ' GB</div>';
+    }
+    html += '</div></div>';
+  }
+  
+  html += '</div></div></div>';
+  
+  document.getElementById('simResult').innerHTML = html;
+  updateStackChart();
+}
+
+function updateComparison() {
+  var selA = document.getElementById('selectA').value;
+  var selB = document.getElementById('selectB').value;
+  var mA = modelsData[selA];
+  var mB = modelsData[selB];
+  var L = i18n[currentLang];
+  
+  var specs = [
+    {key:'dev', labelKey:'specDev'},
+    {key:'params', labelKey:'specParams'},
+    {key:'sizeQ4Str', labelKey:'compSize', numeric:true, lowerBetter:true},
+    {key:'contextStr', labelKey:'compContext', numeric:true, higher:true},
+    {key:'langs', labelKey:'compLangs'},
+    {key:'mmlu', labelKey:'compMMLU', numeric:true, higher:true},
+    {key:'gsm8k', labelKey:'compGSM8K', numeric:true, higher:true},
+    {key:'humaneval', labelKey:'compHumanEval', numeric:true, higher:true},
+    {key:'vision', labelKey:'compVision'},
+    {key:'tool', labelKey:'compTool'},
+    {key:'inference', labelKey:'compInference'},
+    {key:'best', labelKey:'compBest'}
   ];
   
-  let html = '<table class="w-full text-sm"><thead><tr class="bg-slate-50"><th class="text-left p-4 font-bold text-slate-700 w-1/3">' + (L.specCol || 'Specification') + '</th><th class="text-center p-4 font-bold w-1/3" style="color:' + mA.color + '">' + mA.name + '</th><th class="text-center p-4 font-bold w-1/3" style="color:' + mB.color + '">' + mB.name + '</th></tr></thead><tbody class="divide-y divide-slate-100">';
+  var html = '<table class="w-full text-sm"><thead><tr class="bg-slate-50"><th class="text-left p-4 font-bold text-slate-700 w-1/3">';
+  html += (L.specCol || 'Specification') + '</th>';
+  html += '<th class="text-center p-4 font-bold w-1/3" style="color:' + mA.color + '">' + mA.name + '</th>';
+  html += '<th class="text-center p-4 font-bold w-1/3" style="color:' + mB.color + '">' + mB.name + '</th>';
+  html += '</tr></thead><tbody class="divide-y divide-slate-100">';
   
-  specs.forEach(spec => {
-    const valA = mA[spec.key];
-    const valB = mB[spec.key];
-    const label = L[spec.labelKey] || spec.labelKey;
-    let winnerA = false, winnerB = false;
+  for (var s = 0; s < specs.length; s++) {
+    var spec = specs[s];
+    var valA = mA[spec.key];
+    var valB = mB[spec.key];
+    var label = L[spec.labelKey] || spec.labelKey;
+    var winnerA = false, winnerB = false;
     
-    if (spec.numeric && spec.higher !== undefined) {
-      const numA = parseFloat(String(valA).replace(/[^0-9.]/g, ''));
-      const numB = parseFloat(String(valB).replace(/[^0-9.]/g, ''));
-      if (spec.higher) {
-        winnerA = numA > numB;
-        winnerB = numB > numA;
-      } else {
-        winnerA = numA < numB;
-        winnerB = numB < numA;
+    if (spec.numeric) {
+      var numA = parseFloat(String(valA).replace(/[^0-9.]/g, ''));
+      var numB = parseFloat(String(valB).replace(/[^0-9.]/g, ''));
+      if (!isNaN(numA) && !isNaN(numB)) {
+        if (spec.higher) {
+          winnerA = numA > numB; winnerB = numB > numA;
+        } else {
+          winnerA = numA < numB; winnerB = numB < numA;
+        }
       }
     }
     
-    const styleA = winnerA ? 'font-bold' : '';
-    const styleB = winnerB ? 'font-bold' : '';
-    const bgA = winnerA ? mA.colorLight : '';
-    const bgB = winnerB ? mB.colorLight : '';
+    var bgA = winnerA ? mA.colorLight : '';
+    var bgB = winnerB ? mB.colorLight : '';
     
-    html += `<tr class="compare-row"><td class="p-4 font-semibold">${label}</td><td class="p-4 text-center ${styleA}" style="${winnerA ? 'background:' + bgA + ';border-radius:8px;' : ''}">${valA}${winnerA ? ' ' + L.compWinner : ''}</td><td class="p-4 text-center ${styleB}" style="${winnerB ? 'background:' + bgB + ';border-radius:8px;' : ''}">${valB}${winnerB ? ' ' + L.compWinner : ''}</td></tr>`;
-  });
+    html += '<tr class="compare-row"><td class="p-4 font-semibold">' + label + '</td>';
+    html += '<td class="p-4 text-center' + (winnerA ? ' font-bold' : '') + '" style="' + (winnerA ? 'background:' + bgA + ';border-radius:8px;' : '') + '">' + valA + (winnerA ? ' ' + L.compWinner : '') + '</td>';
+    html += '<td class="p-4 text-center' + (winnerB ? ' font-bold' : '') + '" style="' + (winnerB ? 'background:' + bgB + ';border-radius:8px;' : '') + '">' + valB + (winnerB ? ' ' + L.compWinner : '') + '</td>';
+    html += '</tr>';
+  }
   
   html += '</tbody></table>';
   document.getElementById('comparisonResult').innerHTML = html;
 }
 
 function updateCharts() {
-  const L = i18n[currentLang];
-  const isEn = currentLang === 'en';
+  var L = i18n[currentLang];
   
-  // Destroy existing charts
-  Object.values(chartInstances).forEach(c => c.destroy());
-  chartInstances = {};
+  var keys = Object.keys(chartInstances);
+  for (var k = 0; k < keys.length; k++) {
+    if (keys[k] !== 'simStack') {
+      chartInstances[keys[k]].destroy();
+    }
+  }
   
   Chart.defaults.font.family = "'Inter', sans-serif";
   Chart.defaults.font.size = 12;
   
-  const modelKeys = ['qwen2', 'qwen3', 'llama', 'gemma'];
-  const modelNames = modelKeys.map(k => modelsData[k].name.replace('-Q4', ''));
-  const modelColors = modelKeys.map(k => modelsData[k].color);
-  const modelColorsAlpha = modelKeys.map(k => modelsData[k].color + '33');
+  var modelKeys = ['qwen2','qwen3','llama','gemma'];
+  var modelNames = [];
+  var modelColors = [];
+  for (var i = 0; i < modelKeys.length; i++) {
+    modelNames.push(modelsData[modelKeys[i]].shortName);
+    modelColors.push(modelsData[modelKeys[i]].color);
+  }
   
-  // RAM Chart
-  const ramCtx = document.getElementById('ramChart').getContext('2d');
-  chartInstances.ram = new Chart(ramCtx, {
+  var rCtx = document.getElementById('ramChart').getContext('2d');
+  chartInstances.ram = new Chart(rCtx, {
     type: 'bar',
     data: {
       labels: modelNames,
       datasets: [{
-        label: isEn ? 'RAM (GB)' : 'RAM (GB)',
-        data: modelKeys.map(k => modelsData[k].ram),
+        label: 'RAM (GB)',
+        data: modelKeys.map(function(k){ return modelsData[k].ram; }),
         backgroundColor: modelColors,
         borderRadius: 8,
         borderSkipped: false,
-        barThickness: 40,
+        barThickness: 40
       }]
     },
     options: {
@@ -844,19 +804,16 @@ function updateCharts() {
       plugins: {
         legend: { display: false },
         datalabels: {
-          display: true,
-          anchor: 'end',
-          align: 'end',
-          formatter: v => v + ' GB',
+          display: true, anchor: 'end', align: 'end',
+          formatter: function(v){ return v + ' GB'; },
           font: { weight: 'bold', size: 11 },
           color: '#475569'
         }
       },
       scales: {
         y: {
-          beginAtZero: true,
-          max: 3.5,
-          ticks: { stepSize: 0.5, callback: v => v + ' GB' },
+          beginAtZero: true, max: 3.5,
+          ticks: { stepSize: 0.5, callback: function(v){ return v + ' GB'; } },
           grid: { color: '#f1f5f9' }
         },
         x: {
@@ -868,19 +825,18 @@ function updateCharts() {
     plugins: [ChartDataLabels]
   });
   
-  // Context Chart
-  const ctxCtx = document.getElementById('contextChart').getContext('2d');
-  chartInstances.context = new Chart(ctxCtx, {
+  var cCtx = document.getElementById('contextChart').getContext('2d');
+  chartInstances.context = new Chart(cCtx, {
     type: 'bar',
     data: {
       labels: modelNames,
       datasets: [{
-        label: isEn ? 'Context (tokens)' : 'Contexto (tokens)',
-        data: modelKeys.map(k => modelsData[k].context),
+        label: 'Context (tokens)',
+        data: modelKeys.map(function(k){ return modelsData[k].context; }),
         backgroundColor: modelColors,
         borderRadius: 8,
         borderSkipped: false,
-        barThickness: 40,
+        barThickness: 40
       }]
     },
     options: {
@@ -890,10 +846,8 @@ function updateCharts() {
       plugins: {
         legend: { display: false },
         datalabels: {
-          display: true,
-          anchor: 'end',
-          align: 'end',
-          formatter: v => v >= 1000 ? (v/1000) + 'K' : v,
+          display: true, anchor: 'end', align: 'end',
+          formatter: function(v){ return v >= 1000 ? (v/1000) + 'K' : v; },
           font: { weight: 'bold', size: 11 },
           color: '#475569'
         }
@@ -901,7 +855,7 @@ function updateCharts() {
       scales: {
         x: {
           beginAtZero: true,
-          ticks: { callback: v => v >= 1000 ? (v/1000) + 'K' : v },
+          ticks: { callback: function(v){ return v >= 1000 ? (v/1000) + 'K' : v; } },
           grid: { color: '#f1f5f9' }
         },
         y: {
@@ -913,32 +867,31 @@ function updateCharts() {
     plugins: [ChartDataLabels]
   });
   
-  // Radar Chart
-  const radarCtx = document.getElementById('radarChart').getContext('2d');
-  const radarLabels = isEn 
-    ? ['Reasoning', 'Math', 'Code', 'Languages', 'Vision', 'General']
-    : ['Razonamiento', 'Matemáticas', 'Código', 'Idiomas', 'Visión', 'General'];
+  var radarLabels = currentLang === 'en'
+    ? ['Reasoning','Math','Code','Languages','Vision','General']
+    : ['Razonamiento','Matemáticas','Código','Idiomas','Visión','General'];
+  
+  var radarCtx = document.getElementById('radarChart').getContext('2d');
+  var radarDatasets = [];
+  for (var r = 0; r < modelKeys.length; r++) {
+    var mk = modelKeys[r];
+    var spec = modelsData[mk].specialties;
+    radarDatasets.push({
+      label: modelsData[mk].shortName,
+      data: [spec.razonamiento, spec.matematicas, spec.codigo, spec.idiomas, spec.vision, spec.general],
+      borderColor: modelsData[mk].color,
+      backgroundColor: modelsData[mk].color + '18',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: modelsData[mk].color
+    });
+  }
   
   chartInstances.radar = new Chart(radarCtx, {
     type: 'radar',
     data: {
       labels: radarLabels,
-      datasets: modelKeys.map((key, idx) => ({
-        label: modelsData[key].name.replace('-Q4', ''),
-        data: [
-          modelsData[key].specialties.razonamiento,
-          modelsData[key].specialties.matematicas,
-          modelsData[key].specialties.codigo,
-          modelsData[key].specialties.idiomas,
-          modelsData[key].specialties.vision,
-          modelsData[key].specialties.general
-        ],
-        borderColor: modelsData[key].color,
-        backgroundColor: modelsData[key].color + '18',
-        borderWidth: 2,
-        pointRadius: 3,
-        pointBackgroundColor: modelsData[key].color,
-      }))
+      datasets: radarDatasets
     },
     options: {
       responsive: true,
@@ -951,8 +904,7 @@ function updateCharts() {
       },
       scales: {
         r: {
-          beginAtZero: true,
-          max: 100,
+          beginAtZero: true, max: 100,
           ticks: { stepSize: 20, backdropColor: 'transparent', font: { size: 9 } },
           pointLabels: { font: { size: 11, weight: '600' } },
           grid: { color: '#e2e8f0' },
@@ -962,39 +914,32 @@ function updateCharts() {
     }
   });
   
-  // Benchmark Chart
-  const benchCtx = document.getElementById('benchChart').getContext('2d');
-  chartInstances.bench = new Chart(benchCtx, {
+  var bCtx = document.getElementById('benchChart').getContext('2d');
+  chartInstances.bench = new Chart(bCtx, {
     type: 'bar',
     data: {
       labels: modelNames,
       datasets: [
         {
           label: 'MMLU',
-          data: modelKeys.map(k => modelsData[k].mmlu),
+          data: modelKeys.map(function(k){ return modelsData[k].mmlu; }),
           backgroundColor: modelColors[0],
-          borderRadius: 6,
-          borderSkipped: false,
-          barPercentage: 0.8,
-          categoryPercentage: 0.7,
+          borderRadius: 6, borderSkipped: false,
+          barPercentage: 0.8, categoryPercentage: 0.7
         },
         {
           label: 'GSM8K',
-          data: modelKeys.map(k => modelsData[k].gsm8k),
+          data: modelKeys.map(function(k){ return modelsData[k].gsm8k; }),
           backgroundColor: modelColors[1],
-          borderRadius: 6,
-          borderSkipped: false,
-          barPercentage: 0.8,
-          categoryPercentage: 0.7,
+          borderRadius: 6, borderSkipped: false,
+          barPercentage: 0.8, categoryPercentage: 0.7
         },
         {
           label: 'HumanEval',
-          data: modelKeys.map(k => modelsData[k].humaneval),
+          data: modelKeys.map(function(k){ return modelsData[k].humaneval; }),
           backgroundColor: modelColors[2],
-          borderRadius: 6,
-          borderSkipped: false,
-          barPercentage: 0.8,
-          categoryPercentage: 0.7,
+          borderRadius: 6, borderSkipped: false,
+          barPercentage: 0.8, categoryPercentage: 0.7
         }
       ]
     },
@@ -1007,19 +952,15 @@ function updateCharts() {
           labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 15, font: { size: 11 } }
         },
         datalabels: {
-          display: true,
-          anchor: 'end',
-          align: 'end',
-          font: { size: 10, weight: 'bold' },
-          color: '#475569',
-          formatter: v => v
+          display: true, anchor: 'end', align: 'end',
+          font: { size: 10, weight: 'bold' }, color: '#475569',
+          formatter: function(v){ return v; }
         }
       },
       scales: {
         y: {
-          beginAtZero: true,
-          max: 100,
-          ticks: { stepSize: 20, callback: v => v + '%' },
+          beginAtZero: true, max: 100,
+          ticks: { stepSize: 20, callback: function(v){ return v + '%'; } },
           grid: { color: '#f1f5f9' }
         },
         x: {
@@ -1032,37 +973,132 @@ function updateCharts() {
   });
 }
 
-// Intersection Observer for animations
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
+function updateStackChart() {
+  if (chartInstances.simStack) {
+    chartInstances.simStack.destroy();
+  }
+  
+  var L = i18n[currentLang];
+  var ramOptions = [6, 8, 12];
+  var modelKeys = ['qwen2','qwen3','llama','gemma'];
+  
+  var osUsage = osData[simState.os];
+  
+  var datasets = [];
+  datasets.push({
+    label: osUsage.name + ' OS',
+    data: ramOptions.map(function(){ return osUsage.baseUsage; }),
+    backgroundColor: '#94a3b8',
+    borderColor: '#64748b',
+    borderWidth: 1, borderRadius: 4,
+    barPercentage: 0.85, categoryPercentage: 0.75
   });
+  datasets.push({
+    label: 'Buffer OS',
+    data: ramOptions.map(function(){ return osUsage.buffer; }),
+    backgroundColor: '#cbd5e1',
+    borderColor: '#94a3b8',
+    borderWidth: 1, borderRadius: 4,
+    barPercentage: 0.85, categoryPercentage: 0.75
+  });
+  
+  for (var m = 0; m < modelKeys.length; m++) {
+    var mk = modelKeys[m];
+    datasets.push({
+      label: modelsData[mk].shortName,
+      data: ramOptions.map(function(r){
+        var avail = r - osUsage.baseUsage - osUsage.buffer;
+        return avail >= modelsData[mk].sizeQ4GB ? modelsData[mk].sizeQ4GB : null;
+      }),
+      backgroundColor: modelsData[mk].color,
+      borderColor: modelsData[mk].color,
+      borderWidth: 1, borderRadius: 4,
+      barPercentage: 0.85, categoryPercentage: 0.75
+    });
+  }
+  
+  datasets.push({
+    label: 'Free / Context',
+    data: ramOptions.map(function(r){
+      var avail = r - osUsage.baseUsage - osUsage.buffer;
+      var maxModelSize = 0;
+      for (var j = 0; j < modelKeys.length; j++) {
+        if (avail >= modelsData[modelKeys[j]].sizeQ4GB) {
+          if (modelsData[modelKeys[j]].sizeQ4GB > maxModelSize) {
+            maxModelSize = modelsData[modelKeys[j]].sizeQ4GB;
+          }
+        }
+      }
+      return Math.max(0, avail - maxModelSize);
+    }),
+    backgroundColor: '#34d399',
+    borderColor: '#10b981',
+    borderWidth: 1, borderRadius: 4,
+    barPercentage: 0.85, categoryPercentage: 0.75
+  });
+  
+  var ctx = document.getElementById('simStackChart').getContext('2d');
+  chartInstances.simStack = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ramOptions.map(function(r){ return r + ' GB RAM'; }),
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { usePointStyle: true, pointStyle: 'rect', padding: 12, font: { size: 11 } }
+        },
+        datalabels: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + (context.parsed.y !== null ? context.parsed.y.toFixed(2) + ' GB' : 'N/A');
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } },
+        y: { stacked: true, beginAtZero: true, max: 12, ticks: { stepSize: 1, callback: function(v){ return v + ' GB'; } }, grid: { color: '#f1f5f9' } }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
+
+var observer = new IntersectionObserver(function(entries) {
+  for (var i = 0; i < entries.length; i++) {
+    if (entries[i].isIntersecting) {
+      entries[i].target.style.opacity = '1';
+      entries[i].target.style.transform = 'translateY(0)';
+    }
+  }
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.fade-in').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'all 0.6s ease';
-  observer.observe(el);
-});
+var fadeElements = document.querySelectorAll('.fade-in');
+for (var i = 0; i < fadeElements.length; i++) {
+  fadeElements[i].style.opacity = '0';
+  fadeElements[i].style.transform = 'translateY(20px)';
+  fadeElements[i].style.transition = 'all 0.6s ease';
+  observer.observe(fadeElements[i]);
+}
 
-// Initialize
 setLang('es');
-updateComparison();
 
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
+var anchors = document.querySelectorAll('a[href^="#"]');
+for (var i = 0; i < anchors.length; i++) {
+  anchors[i].addEventListener('click', function(e) {
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
+    var href = this.getAttribute('href');
+    var target = document.querySelector(href);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-});
+}
 </script>
 </body>
 </html>
-
 
