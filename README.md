@@ -7,6 +7,9 @@
 > 📱 **Comparativa completa y visual de 4 modelos LLM cuantizados (Q4) optimizados para ejecución local en smartphones.**  
 > 📱 **Complete visual comparison of 4 quantized (Q4) LLM models optimized for local execution on smartphones.**
 
+>> https://aurenox-global.github.io/info_models_ai/
+
+ 
 ## 📖 Descripción / Description
 Este repositorio contiene una **infografía interactiva en HTML** que analiza y compara el rendimiento, consumo de RAM real, ventana de contexto y especialidades de cuatro modelos de lenguaje local populares, ejecutados en formato **Q4 (4-bit)** en dispositivos móviles Android/iOS mediante motores como `llama.cpp` o `MLX`.
 
