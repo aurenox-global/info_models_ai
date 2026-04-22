@@ -1,91 +1,166 @@
-# 📊 Análisis de Modelos IA Locales para Móvil / Local AI Models Mobile Analysis
+# 📱 AI Models Local Infographic & RAM Simulator
 
-[![Language](https://img.shields.io/badge/Lang-ES%20%2F%20EN-blue)]()
-[![License](https://img.shields.io/badge/License-MIT-green)]()
-[![Topic](https://img.shields.io/badge/Topic-LLM%20%7C%20Mobile%20AI%20%7C%20Benchmark-orange)]()
+> **Interactive web dashboard comparing Qwen2.5-3B, Qwen3-4B, Llama3.2-3B & Gemma3-4B for mobile/edge deployment.**  
+> Analyze real-world RAM consumption, context limits, benchmark scores, and device compatibility in a bilingual, fully responsive interface.
 
-> 📱 **Comparativa completa y visual de 4 modelos LLM cuantizados (Q4) optimizados para ejecución local en smartphones.**  
-> 📱 **Complete visual comparison of 4 quantized (Q4) LLM models optimized for local execution on smartphones.**
-
->> https://aurenox-global.github.io/info_models_ai/
-
- 
-## 📖 Descripción / Description
-Este repositorio contiene una **infografía interactiva en HTML** que analiza y compara el rendimiento, consumo de RAM real, ventana de contexto y especialidades de cuatro modelos de lenguaje local populares, ejecutados en formato **Q4 (4-bit)** en dispositivos móviles Android/iOS mediante motores como `llama.cpp` o `MLX`.
-
-El objetivo es ofrecer una referencia clara, bilingüe y visual para usuarios, desarrolladores y entusiastas que quieran ejecutar IA localmente sin depender de la nube.
-
-## 🧠 Modelos Analizados / Analyzed Models
-| Modelo | Desarrollador | Parámetros | Cuantización |
-|---|---|---|---|
-| `Qwen2.5-3B-Q4` | Alibaba | 3B | 4-bit |
-| `Qwen3-4B-Q4` | Alibaba | 4B | 4-bit |
-| `Llama3.2-3B-Q4` | Meta | 3B | 4-bit |
-| `Gemma3-4B-Q4` | Google | 4B | 4-bit |
-
-## 📊 Resultados Clave / Key Findings
-
-### 🏆 ¿Cuál es el más general y consistente?
-**`Qwen3-4B-Q4`** obtiene la **puntuación de consistencia más alta (92%)**, destacando en razonamiento, generación de código, matemáticas y soporte multilingüe (119 idiomas). Es la mejor opción para uso general en móviles con `≥6GB RAM`.
-
-### 📉 Consumo Real de RAM en Móvil (Pico)
-- 🔹 `Llama3.2-3B-Q4`: `~2.0 GB` *(Más eficiente)*
-- 🔹 `Qwen2.5-3B-Q4`: `~2.1 GB`
-- 🔹 `Gemma3-4B-Q4`: `~2.6 GB`
-- 🔹 `Qwen3-4B-Q4`: `~2.8 GB`  
-*(Valores medidos con prompts complejos en ejecución local. El SO reserva ~1.5-2GB adicionales)*
-
-### ⚡ Velocidad vs Contexto
-| Métrica | Ganador | Detalle |
-|---|---|---|
-| 🚀 **Más rápido** | `Llama3.2-3B-Q4` | ~50 tok/s (inferencia en CPU/NPU optimizada) |
-| 📜 **Mayor contexto** | `Llama3.2-3B-Q4` | 128K tokens (ideal para documentos largos) |
-| 💻 **Mejor en código/math** | `Qwen2.5-3B-Q4` | Entrenamiento específico en STEM y programación |
-| 🌐 **Multilingüe & Ciencia** | `Gemma3-4B-Q4` | Alto rendimiento en +100 idiomas y razonamiento técnico |
-
-## 🛠️ Cómo Visualizar la Infografía / How to View
-1. **Descarga o clona** este repositorio:
-   ```bash
-   git clone https://github.com/TU_USUARIO/local-ai-mobile-comparison.git
-   cd local-ai-mobile-comparison
-   ```
-2. **Abre el archivo** `index.html` en cualquier navegador moderno (Chrome, Safari, Firefox).
-3. *(Opcional)* **Publica en GitHub Pages** para compartirlo online:
-   - Ve a `Settings > Pages`
-   - Selecciona rama `main` y carpeta `/ (root)`
-   - Guarda y espera ~2 min. Tendrás un enlace público.
-
-## 📋 Recomendaciones por Caso de Uso / Use-Case Recommendations
-| Caso de Uso / Use Case | Modelo Recomendado | RAM Mínima Dispositivo |
-|---|---|---|
-| 🤖 Uso General / General Assistant | `Qwen3-4B-Q4` | 6 GB |
-| ⚡ Bajo Consumo / Low RAM Devices | `Llama3.2-3B-Q4` | 4 GB |
-| 💻 Programación & Matemáticas / Code & Math | `Qwen2.5-3B-Q4` | 4 GB |
-| 🌐 Multilingüe & Ciencia / Multilingual & Science | `Gemma3-4B-Q4` | 6 GB |
-
-## ⚠️ Notas Técnicas & Disclaimer
-- 🔋 Los valores de RAM son **pico de uso real** medidos en ejecución local. El consumo varía según el SoC (Snapdragon, MediaTek, Apple Silicon), versión del SO y fondo de procesos activos.
-- 🔽 La cuantización **Q4_K_M** reduce el tamaño y consumo de memoria en ~60% respecto a FP16, con una pérdida de precisión del 2-5% en tareas complejas.
-- 📈 Las velocidades (`tok/s`) se miden en hardware móvil de gama media/alta (ej. Snapdragon 8 Gen 2, Apple A15/A16, Dimensity 9200+).
-- 📊 Esta infografía es con fines educativos y de referencia. Los benchmarks reales pueden variar según la implementación (`llama.cpp`, `MLX`, `MNN`, `QNN`) y la longitud del prompt.
-
-## 📁 Estructura del Proyecto / Project Structure
-```
-📦 local-ai-mobile-comparison
- ┣ 📂 assets/              # (Opcional) Capturas o logos
- ┣ 📜 index.html           # Infografía interactiva completa
- ┣ 📜 README.md            # Documentación principal
- ┗ 📜 LICENSE              # Licencia MIT
-```
-
-## 🤝 Contribuir / Contribute
-¿Encontraste errores, tienes datos de benchmarks más recientes o quieres añadir un modelo?  
-¡Abre un **[Issue](issues)** o envía un **[Pull Request](pulls)**! Todas las contribuciones son bienvenidas.
-
-## 📄 Licencia / License
-Este proyecto está bajo la licencia **[MIT](LICENSE)**.  
-Los nombres, logos y marcas de los modelos pertenecen a sus respectivos creadores: `Alibaba Group`, `Meta AI`, `Google DeepMind`.
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/es/docs/Web/HTML)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
 ---
-*Hecho con ❤️ para la comunidad de IA local. / Made with ❤️ for the local AI community.*  
-📩 ¿Dudas o sugerencias? Abre un issue o contáctame en tus redes.
+
+## 🌐 Live Demo
+🚀 **[View Live Demo](https://yourusername.github.io/your-repo-name)** *(Replace with your GitHub Pages / Netlify / Vercel URL)*
+
+📸 *Add screenshots or a GIF demo here:*
+```
+📱 RAM Simulator          📊 Interactive Charts         🔄 Model Comparator
+┌───────────────────────┐  ┌───────────────────────┐  ┌───────────────────────┐
+│  [6GB] [8GB] [12GB]   │  │  ▓▓▓▓▓▓▓▓▓▓  Qwen3    │  │  Model A    VS Model B │
+│  🤖 Android / 🍎 iOS  │  │  ▓▓▓▓▓▓▓▓▓   Llama    │  │  RAM: 1.8GB | 2.5GB   │
+│  ✅ Qwen2.5-3B Fits   │  │  🕸️ Radar Skills      │  │  MMLU: 54   | 62      │
+└───────────────────────┘  └───────────────────────┘  └───────────────────────┘
+```
+
+---
+
+## ✨ Key Features
+| Feature | Description |
+|---------|-------------|
+| 📊 **4 Interactive Charts** | RAM usage, context window, specialty radar, and benchmark comparison (MMLU, GSM8K, HumanEval) |
+| 📱 **Realistic RAM Simulator** | Predicts model feasibility on 6GB/8GB/12GB devices accounting for **Android 14** or **iOS 17/18** overhead + safety buffer |
+| 🔄 **Side-by-Side Comparator** | Select any 2 models to highlight differences in specs, scores, and use-cases |
+| 🌐 **Bilingual (ES/EN)** | One-click toggle with full translation of UI, charts, and documentation |
+| 🎯 **Best-Use Recommendations** | Curated suggestions for Edge/Mobile, Coding, Math/Science, and Vision/Multimodal workloads |
+| 📋 **Complete Specs Table** | Architecture, GGUF size, context limits, licenses, and estimated inference speeds |
+| ⚡ **Zero Build Step** | Single `index.html` file. CDN-hosted libraries. Open directly in any browser. |
+| 📱 **Fully Responsive** | Mobile-first design with smooth animations and modern glassmorphism UI |
+
+---
+
+## ⚙️ How the RAM Simulator Works
+The simulator doesn't just show file size. It calculates **real usable RAM** after accounting for OS background processes and safety margins to prevent OOM (Out of Memory) crashes.
+
+### 🔢 Formula
+```
+Available RAM = Total Device RAM - OS Base Usage - Safety Buffer
+```
+
+| OS | Base Usage | Safety Buffer | Total Reserved | Source |
+|----|------------|---------------|----------------|--------|
+| 🤖 **Android 14** | ~2.5 GB | 0.5 GB | **3.0 GB** | `system_server`, ZRAM, SurfaceFlinger, background services |
+| 🍎 **iOS 17/18** | ~1.8 GB | 0.4 GB | **2.2 GB** | `kernel`, SpringBoard, system caches, memory compression |
+
+### 📏 Model Memory Estimation
+- **Base Size:** `Q4_K_M` GGUF quantization (actual file size on disk)
+- **KV Cache Overhead:** ~1.5 MB per 4K tokens during inference
+- **Status Indicators:**
+  - ✅ **Comfortable:** >0.5 GB free for context & system stability
+  - ⚠️ **Tight:** <0.5 GB free. May throttle or limit context
+  - ❌ **No Fit:** Model exceeds available RAM. Will crash or OOM
+
+---
+
+## 🛠️ Tech Stack
+| Layer | Technology |
+|-------|------------|
+| **Structure** | HTML5 (Semantic) |
+| **Styling** | Tailwind CSS (via CDN) + Custom CSS Variables |
+| **Charts** | Chart.js 4.x + `chartjs-plugin-datalabels` |
+| **Logic** | Vanilla JavaScript (ES6+) |
+| **Typography** | Inter (Fontsource) |
+| **Animations** | CSS `@keyframes` + Intersection Observer API |
+| **Deployment** | GitHub Pages / Netlify / Vercel / Local File |
+
+---
+
+## 🚀 Quick Start & Deployment
+
+### 🔹 Local Usage
+1. Clone or download the repository:
+   ```bash
+   git clone https://github.com/yourusername/ai-models-infographic.git
+   cd ai-models-infographic
+   ```
+2. Open `index.html` in your browser. **No server required.**
+
+### 🔹 Deploy to GitHub Pages
+1. Push to a GitHub repository.
+2. Go to `Settings → Pages → Source: main branch → /root`.
+3. Your dashboard will be live at `https://yourusername.github.io/ai-models-infographic`
+
+### 🔹 One-Click Deploy
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/ai-models-infographic)
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/ai-models-infographic)
+
+---
+
+## 📐 Project Structure
+```
+ai-models-infographic/
+├── index.html          # Single-file application (HTML + CSS + JS)
+├── README.md           # Documentation (this file)
+├── LICENSE             # MIT License
+└── assets/             # (Optional) Screenshots, icons, or branding
+```
+*All logic, styling, and translations are embedded in `index.html` for maximum portability.*
+
+---
+
+## 📚 Data Sources & Methodology
+| Metric | Source / Estimation |
+|--------|---------------------|
+| **GGUF Q4 Size** | `llama.cpp` conversion output (`llama-quantize` Q4_K_M) |
+| **RAM Usage** |实测 memory allocation on Snapdragon 8 Gen 2 / Apple A16 + `llama.cpp` overhead |
+| **Benchmarks** | Community aggregated scores (MMLU, GSM8K, HumanEval) from official model cards & HuggingFace |
+| **Inference Speed** | `llama.cpp` on 4 threads (CPU) + Metal/NNAPI acceleration where applicable |
+| **Context Limit** | Official architecture specs (RoPE scaling, KV cache limits) |
+| **OS Overhead** | Android Developers docs, Apple Memory Management guidelines, real-device profiling |
+
+> ⚠️ **Disclaimer:** Values are **approximations** based on public documentation, community testing, and typical mobile workloads. Actual performance varies by device SoC, thermals, background apps, and `llama.cpp` build flags.
+
+---
+
+## 🤝 Contributing
+Contributions are welcome! Here's how to help:
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch: `git checkout -b feat/add-gemma-2b`
+3. 💻 Make your changes (keep it single-file if possible)
+4. 📝 Commit with conventional messages: `feat: add memory profiling for iOS 18`
+5. 🚀 Push and open a Pull Request
+
+### 🔍 Looking for:
+- Updated benchmark data from 2025 H1 releases
+- Additional OS profiles (HarmonyOS, Ubuntu Touch)
+- New model comparisons (Phi-3-mini, Mistral-7B-Q4, etc.)
+- Accessibility improvements (WCAG 2.1 AA)
+- Performance optimizations for low-end devices
+
+---
+
+## 📄 License
+This project is licensed under the **MIT License** – see the [`LICENSE`](LICENSE) file for details.  
+You are free to use, modify, and distribute this infographic for personal, educational, or commercial purposes.
+
+---
+
+## 🙏 Acknowledgments
+- **Chart.js Team** for the robust visualization library
+- **TailwindCSS** for utility-first styling
+- **llama.cpp Community** for quantization tools & real-world testing data
+- **Model Developers**: Meta AI, Alibaba Qwen Team, Google DeepMind
+- **Open Source Contributors** who benchmark and share GGUF performance metrics
+
+---
+
+## 📬 Contact & Support
+- 💬 Open an [Issue](https://github.com/yourusername/ai-models-infographic/issues) for bugs or data corrections
+- 📧 Questions? Reach out via GitHub Discussions
+- ⭐ **Found it useful?** Consider starring the repository!
+
+---
+*Made with ❤️ for the local AI & edge computing community.*  
+*Last updated: `$(date +%B\ %Y)` | Framework: Vanilla JS + Tailwind + Chart.js*
+
