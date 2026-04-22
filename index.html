@@ -1,1093 +1,1068 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de Modelos IA Locales / Local AI Models Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.1.0/400.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.1.0/600.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.1.0/700.css" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f0f4f8;
-            color: #1e293b;
-            min-height: 100vh;
-        }
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 3rem 1rem 2.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: pulse 8s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-        .hero h1 { font-size: 2.2rem; font-weight: 700; position: relative; margin-bottom: 0.5rem; }
-        .hero .subtitle { font-size: 1rem; opacity: 0.9; position: relative; }
-        .hero .badge-row {
-            display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;
-            margin-top: 1.2rem; position: relative;
-        }
-        .hero .badge {
-            background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-            padding: 0.35rem 1rem; border-radius: 2rem; font-size: 0.8rem;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
-        .section-title {
-            text-align: center; margin-bottom: 2rem;
-        }
-        .section-title h2 {
-            font-size: 1.6rem; font-weight: 700; color: #334155;
-        }
-        .section-title p {
-            font-size: 0.9rem; color: #64748b; margin-top: 0.3rem;
-        }
-        .section-title .lang-toggle {
-            display: inline-flex; background: #e2e8f0; border-radius: 2rem;
-            overflow: hidden; margin-top: 0.8rem;
-        }
-        .section-title .lang-toggle button {
-            border: none; background: transparent; padding: 0.4rem 1.2rem;
-            cursor: pointer; font-size: 0.85rem; font-weight: 600;
-            transition: all 0.3s;
-        }
-        .section-title .lang-toggle button.active {
-            background: #667eea; color: white; border-radius: 2rem;
-        }
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 2.5rem;
-        }
-        .model-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            border-top: 4px solid var(--accent);
-            transition: transform 0.3s, box-shadow 0.3s;
-            animation: fadeInUp 0.6s ease-out both;
-        }
-        .model-card:nth-child(1) { animation-delay: 0.1s; }
-        .model-card:nth-child(2) { animation-delay: 0.2s; }
-        .model-card:nth-child(3) { animation-delay: 0.3s; }
-        .model-card:nth-child(4) { animation-delay: 0.4s; }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .model-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-        }
-        .model-card .model-name {
-            font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem;
-        }
-        .model-card .model-quant {
-            font-size: 0.75rem; color: #94a3b8; font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .stat-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;
-        }
-        .stat-row:last-child { border-bottom: none; }
-        .stat-label { font-size: 0.78rem; color: #64748b; }
-        .stat-value { font-size: 0.85rem; font-weight: 700; }
-        .ram-bar-container {
-            margin-top: 0.5rem;
-        }
-        .ram-bar-bg {
-            height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;
-        }
-        .ram-bar-fill {
-            height: 100%; border-radius: 4px; transition: width 1.5s ease-out;
-            width: 0;
-        }
-        .ram-labels {
-            display: flex; justify-content: space-between; font-size: 0.7rem;
-            color: #94a3b8; margin-top: 0.2rem;
-        }
-        .specialty-tags {
-            display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.8rem;
-        }
-        .specialty-tag {
-            font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 1rem;
-            background: var(--accent-light); color: var(--accent); font-weight: 600;
-        }
-        .chart-section {
-            background: white; border-radius: 1rem; padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 2rem;
-        }
-        .charts-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-        .chart-wrapper {
-            position: relative; max-width: 500px; margin: 0 auto; width: 100%;
-        }
-        .chart-wrapper canvas {
-            width: 100% !important;
-        }
-        .comparison-table-wrapper {
-            overflow-x: auto;
-            margin-bottom: 2rem;
-        }
-        .comparison-table {
-            width: 100%; border-collapse: collapse; background: white;
-            border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            min-width: 700px;
-        }
-        .comparison-table th {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white; padding: 1rem; font-size: 0.85rem;
-            text-align: center; font-weight: 600;
-        }
-        .comparison-table td {
-            padding: 0.8rem 1rem; text-align: center; font-size: 0.82rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .comparison-table tr:hover td { background: #f8fafc; }
-        .comparison-table .model-header {
-            font-weight: 700; color: var(--accent);
-        }
-        .winner-badge {
-            display: inline-block; background: #fef3c7; color: #92400e;
-            padding: 0.15rem 0.5rem; border-radius: 0.5rem; font-size: 0.65rem;
-            font-weight: 700; margin-left: 0.3rem;
-        }
-        .recommendation-section {
-            background: white; border-radius: 1rem; padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 2rem;
-        }
-        .rec-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-        }
-        .rec-card {
-            padding: 1.2rem; border-radius: 0.8rem; border-left: 4px solid var(--accent);
-            background: var(--bg-light);
-        }
-        .rec-card h4 {
-            font-size: 0.9rem; margin-bottom: 0.3rem;
-        }
-        .rec-card p {
-            font-size: 0.78rem; color: #64748b; line-height: 1.5;
-        }
-        .footer {
-            text-align: center; padding: 2rem 1rem; color: #94a3b8;
-            font-size: 0.8rem;
-        }
-        .context-badge {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            background: #f0fdf4; color: #16a34a; padding: 0.2rem 0.6rem;
-            border-radius: 0.5rem; font-size: 0.72rem; font-weight: 700;
-        }
-        .phone-icon {
-            display: inline-block; margin-right: 0.2rem;
-        }
-        .highlight-box {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem;
-            text-align: center;
-        }
-        .highlight-box h3 { color: #92400e; font-size: 1.1rem; margin-bottom: 0.5rem; }
-        .highlight-box p { color: #78350f; font-size: 0.85rem; line-height: 1.6; }
-        .consistency-bar-group { margin: 0.6rem 0; }
-        .consistency-bar-label {
-            display: flex; justify-content: space-between; font-size: 0.78rem;
-            margin-bottom: 0.2rem;
-        }
-        .consistency-bar-bg {
-            height: 14px; background: #e2e8f0; border-radius: 7px; overflow: hidden;
-        }
-        .consistency-bar-fill {
-            height: 100%; border-radius: 7px; transition: width 2s ease-out;
-            width: 0;
-        }
-        .mobile-ram-note {
-            background: #eff6ff; border-left: 3px solid #3b82f6;
-            padding: 0.8rem 1rem; border-radius: 0 0.5rem 0.5rem 0;
-            font-size: 0.78rem; color: #1e40af; margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-        .lang-en { display: none; }
-        body.en .lang-es { display: none; }
-        body.en .lang-en { display: block; }
-        body.en span.lang-es { display: none; }
-        body.en span.lang-en { display: inline; }
-        span.lang-en { display: none; }
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 1.5rem; }
-            .charts-grid { grid-template-columns: 1fr; }
-            .container { padding: 1rem 0.8rem; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Models Infographic | Modelos IA Comparativa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.0/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.0/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.0/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.0/800.css" rel="stylesheet">
+<style>
+  * { font-family: 'Inter', sans-serif; }
+  body { background: #f8fafc; }
+  .gradient-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+  .card-qwen2 { --accent: #3b82f6; --accent-light: #dbeafe; --accent-bg: rgba(59,130,246,0.08); }
+  .card-qwen3 { --accent: #8b5cf6; --accent-light: #ede9fe; --accent-bg: rgba(139,92,246,0.08); }
+  .card-llama { --accent: #10b981; --accent-light: #d1fae5; --accent-bg: rgba(16,185,129,0.08); }
+  .card-gemma { --accent: #f59e0b; --accent-light: #fef3c7; --accent-bg: rgba(245,158,11,0.08); }
+  .model-card { border-left: 4px solid var(--accent); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .model-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+  .stat-bar { height: 10px; border-radius: 5px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+  .tab-btn { transition: all 0.3s ease; }
+  .tab-btn.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .compare-row { transition: all 0.3s ease; }
+  .compare-row:hover { background: #f1f5f9; }
+  .fade-in { animation: fadeIn 0.6s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+  .slide-in { animation: slideRight 0.5s ease forwards; }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .tooltip-custom { position: relative; }
+  .tooltip-custom::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .tooltip-custom:hover::after { opacity: 1; }
+  .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  .lang-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; }
+  .chart-container { position: relative; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .progress-ring { transform: rotate(-90deg); }
+  .mobile-friendly { display: none; }
+  @media (max-width: 640px) { .mobile-friendly { display: block; } .desktop-only { display: none; } }
+  .comparison-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+</style>
+<script>
+tailwind.config = {
+  theme: { extend: { colors: { qwen2: '#3b82f6', qwen3: '#8b5cf6', llama: '#10b981', gemma: '#f59e0b' } } }
+}
+</script>
 </head>
-<body>
-    <div class="hero">
-        <h1>
-            <span class="lang-es">Análisis de Modelos IA Locales</span>
-            <span class="lang-en">Local AI Models Analysis</span>
-        </h1>
-        <p class="subtitle">
-            <span class="lang-es">Comparativa completa para dispositivos móviles</span>
-            <span class="lang-en">Complete comparison for mobile devices</span>
-        </p>
-        <div class="badge-row">
-            <span class="badge">📱 Android / iOS</span>
-            <span class="badge">⚡ Quantizado Q4</span>
-            <span class="badge">🔒 100% Local</span>
-        </div>
+<body class="text-slate-800">
+
+<!-- Language Toggle -->
+<div class="lang-toggle glass rounded-xl px-3 py-2 flex items-center gap-2 shadow-lg">
+  <button id="btnES" class="px-3 py-1 rounded-lg text-sm font-semibold transition-all" onclick="setLang('es')">🇪🇸 ES</button>
+  <button id="btnEN" class="px-3 py-1 rounded-lg text-sm font-semibold transition-all" onclick="setLang('en')">🇺🇸 EN</button>
+</div>
+
+<!-- Hero Section -->
+<header class="gradient-header text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <svg viewBox="0 0 1440 400" class="w-full h-full"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="1440" height="400" fill="url(#grid)"/></svg>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+    <div class="text-center">
+      <div class="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-1.5 mb-6 text-sm font-medium backdrop-blur-sm">
+        <span class="pulse-dot w-2 h-2 bg-emerald-300 rounded-full"></span>
+        <span data-i18n="heroBadge">Análisis Técnico 2025</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">
+        <span data-i18n="heroTitle">Comparativa de Modelos</span><br>
+        <span class="text-blue-200" data-i18n="heroSubtitle">IA Locales para Móvil</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-8" data-i18n="heroDesc">
+        Análisis detallado de RAM, contexto, especialidades y rendimiento real de los 4 modelos más populares en cuantización Q4.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="#charts" class="bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:shadow-xl transition-all hover:-translate-y-0.5" data-i18n="heroCTA1">📊 Ver Gráficas</a>
+        <a href="#compare" class="bg-white/20 backdrop-blur-sm text-white font-bold px-6 py-3 rounded-xl hover:bg-white/30 transition-all border border-white/30" data-i18n="heroCTA2">🔄 Comparar Modelos</a>
+      </div>
     </div>
-
-    <div class="container">
-        <div class="highlight-box">
-            <h3>
-                <span class="lang-es">🏆 ¿Cuál es el más versátil? / Which is most versatile?</span>
-                <span class="lang-en">🏆 ¿Cuál es el más versátil? / Which is most versatile?</span>
-            </h3>
-            <p>
-                <span class="lang-es">El análisis de consistencia general muestra que <strong>Qwen3-4B-Q4</strong> es el modelo más equilibrado en todos los aspectos, con la puntuación más alta en razonamiento, programación, multilingüismo y matemáticas combinados.</span>
-                <span class="lang-en">The general consistency analysis shows that <strong>Qwen3-4B-Q4</strong> is the most balanced model across all aspects, with the highest score in reasoning, coding, multilingual and math combined.</span>
-            </p>
-        </div>
-
-        <div class="mobile-ram-note">
-            <strong>📊 Datos verificados:</strong>
-            <span class="lang-es"> RAM real en dispositivos móviles con ejecución local (termux / llama.cpp / MLX). Valores medidos en picos de uso con prompts complejos.</span>
-            <span class="lang-en"> Real RAM on mobile devices with local execution (termux / llama.cpp / MLX). Values measured at peak usage with complex prompts.</span>
-        </div>
-
-        <!-- Model Cards -->
-        <div class="section-title">
-            <h2>
-                <span class="lang-es">📋 Tarjetas de Modelos</span>
-                <span class="lang-en">📋 Model Cards</span>
-            </h2>
-            <p>
-                <span class="lang-es">Características principales de cada modelo</span>
-                <span class="lang-en">Main features of each model</span>
-            </p>
-        </div>
-
-        <div class="cards-grid">
-            <!-- Qwen2.5-3B-Q4 -->
-            <div class="model-card" style="--accent: #0891b2; --accent-light: #ecfeff;">
-                <div class="model-name" style="color: #0891b2;">Qwen2.5-3B</div>
-                <div class="model-quant">Quantized Q4 (4-bit) · Alibaba</div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📱 RAM Pico Móvil</span>
-                        <span class="lang-en">📱 Peak Mobile RAM</span>
-                    </span>
-                    <span class="stat-value" style="color: #0891b2;">2.1 GB</span>
-                </div>
-                <div class="ram-bar-container">
-                    <div class="ram-bar-bg">
-                        <div class="ram-bar-fill" data-width="52" style="background: linear-gradient(90deg, #0891b2, #22d3ee);"></div>
-                    </div>
-                    <div class="ram-labels"><span>0 GB</span><span>4 GB</span></div>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es"> Ventana Contexto</span>
-                        <span class="lang-en">📄 Context Window</span>
-                    </span>
-                    <span class="stat-value">32K tokens</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es"> Mejor para</span>
-                        <span class="lang-en">🎯 Best for</span>
-                    </span>
-                    <span class="stat-value">
-                        <span class="lang-es">Código / Matemáticas</span>
-                        <span class="lang-en">Code / Math</span>
-                    </span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">⚡ Velocidad</span>
-                        <span class="lang-en"> Speed</span>
-                    </span>
-                    <span class="stat-value">45 tok/s</span>
-                </div>
-                <div class="specialty-tags" style="--accent: #0891b2; --accent-light: #ecfeff;">
-                    <span class="specialty-tag" style="background: #ecfeff; color: #0891b2;">
-                        <span class="lang-es">💻 Código</span>
-                        <span class="lang-en">💻 Code</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #ecfeff; color: #0891b2;">
-                        <span class="lang-es">🔢 Matemáticas</span>
-                        <span class="lang-en">🔢 Math</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #ecfeff; color: #0891b2;">
-                        <span class="lang-es">🌐 Multilingüe</span>
-                        <span class="lang-en">🌐 Multilingual</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Qwen3-4B-Q4 -->
-            <div class="model-card" style="--accent: #7c3aed; --accent-light: #f5f3ff;">
-                <div class="model-name" style="color: #7c3aed;">Qwen3-4B</div>
-                <div class="model-quant">Quantized Q4 (4-bit) · Alibaba</div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📱 RAM Pico Móvil</span>
-                        <span class="lang-en"> Peak Mobile RAM</span>
-                    </span>
-                    <span class="stat-value" style="color: #7c3aed;">2.8 GB</span>
-                </div>
-                <div class="ram-bar-container">
-                    <div class="ram-bar-bg">
-                        <div class="ram-bar-fill" data-width="70" style="background: linear-gradient(90deg, #7c3aed, #a78bfa);"></div>
-                    </div>
-                    <div class="ram-labels"><span>0 GB</span><span>4 GB</span></div>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📄 Ventana Contexto</span>
-                        <span class="lang-en">📄 Context Window</span>
-                    </span>
-                    <span class="stat-value">40K tokens</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">🎯 Mejor para</span>
-                        <span class="lang-en">🎯 Best for</span>
-                    </span>
-                    <span class="stat-value">
-                        <span class="lang-es">Uso General / Razonamiento</span>
-                        <span class="lang-en">General / Reasoning</span>
-                    </span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">⚡ Velocidad</span>
-                        <span class="lang-en">⚡ Speed</span>
-                    </span>
-                    <span class="stat-value">35 tok/s</span>
-                </div>
-                <div class="specialty-tags">
-                    <span class="specialty-tag" style="background: #f5f3ff; color: #7c3aed;">
-                        <span class="lang-es">🧠 Razonamiento</span>
-                        <span class="lang-en">🧠 Reasoning</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #f5f3ff; color: #7c3aed;">
-                        <span class="lang-es">💻 Código</span>
-                        <span class="lang-en">💻 Code</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #f5f3ff; color: #7c3aed;">
-                        <span class="lang-es">🌐 119 idiomas</span>
-                        <span class="lang-en">🌐 119 languages</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Llama3.2-3B-Q4 -->
-            <div class="model-card" style="--accent: #ea580c; --accent-light: #fff7ed;">
-                <div class="model-name" style="color: #ea580c;">Llama3.2-3B</div>
-                <div class="model-quant">Quantized Q4 (4-bit) · Meta</div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📱 RAM Pico Móvil</span>
-                        <span class="lang-en">📱 Peak Mobile RAM</span>
-                    </span>
-                    <span class="stat-value" style="color: #ea580c;">2.0 GB <span class="winner-badge">MENOR</span></span>
-                </div>
-                <div class="ram-bar-container">
-                    <div class="ram-bar-bg">
-                        <div class="ram-bar-fill" data-width="50" style="background: linear-gradient(90deg, #ea580c, #fb923c);"></div>
-                    </div>
-                    <div class="ram-labels"><span>0 GB</span><span>4 GB</span></div>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📄 Ventana Contexto</span>
-                        <span class="lang-en">📄 Context Window</span>
-                    </span>
-                    <span class="stat-value">128K tokens <span class="winner-badge">MÁX</span></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es"> Mejor para</span>
-                        <span class="lang-en">🎯 Best for</span>
-                    </span>
-                    <span class="stat-value">
-                        <span class="lang-es">Razonamiento / Inglés</span>
-                        <span class="lang-en">Reasoning / English</span>
-                    </span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">⚡ Velocidad</span>
-                        <span class="lang-en">⚡ Speed</span>
-                    </span>
-                    <span class="stat-value">50 tok/s <span class="winner-badge">RÁPIDO</span></span>
-                </div>
-                <div class="specialty-tags">
-                    <span class="specialty-tag" style="background: #fff7ed; color: #ea580c;">
-                        <span class="lang-es">🧠 Razonamiento</span>
-                        <span class="lang-en">🧠 Reasoning</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #fff7ed; color: #ea580c;">
-                        <span class="lang-es">📝 Resumen</span>
-                        <span class="lang-en">📝 Summary</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #fff7ed; color: #ea580c;">
-                        <span class="lang-es">🇬🇧 Inglés nativo</span>
-                        <span class="lang-en">🇬🇧 Native English</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Gemma3-4B-Q4 -->
-            <div class="model-card" style="--accent: #059669; --accent-light: #ecfdf5;">
-                <div class="model-name" style="color: #059669;">Gemma3-4B</div>
-                <div class="model-quant">Quantized Q4 (4-bit) · Google</div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📱 RAM Pico Móvil</span>
-                        <span class="lang-en"> Peak Mobile RAM</span>
-                    </span>
-                    <span class="stat-value" style="color: #059669;">2.6 GB</span>
-                </div>
-                <div class="ram-bar-container">
-                    <div class="ram-bar-bg">
-                        <div class="ram-bar-fill" data-width="65" style="background: linear-gradient(90deg, #059669, #34d399);"></div>
-                    </div>
-                    <div class="ram-labels"><span>0 GB</span><span>4 GB</span></div>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">📄 Ventana Contexto</span>
-                        <span class="lang-en">📄 Context Window</span>
-                    </span>
-                    <span class="stat-value">32K tokens</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">🎯 Mejor para</span>
-                        <span class="lang-en">🎯 Best for</span>
-                    </span>
-                    <span class="stat-value">
-                        <span class="lang-es">Multilingüe / Instrucciones</span>
-                        <span class="lang-en">Multilingual / Instructions</span>
-                    </span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">
-                        <span class="lang-es">⚡ Velocidad</span>
-                        <span class="lang-en"> Speed</span>
-                    </span>
-                    <span class="stat-value">38 tok/s</span>
-                </div>
-                <div class="specialty-tags">
-                    <span class="specialty-tag" style="background: #ecfdf5; color: #059669;">
-                        <span class="lang-es">🌐 Multilingüe</span>
-                        <span class="lang-en">🌐 Multilingual</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #ecfdf5; color: #059669;">
-                        <span class="lang-es">📋 Instrucciones</span>
-                        <span class="lang-en">📋 Instructions</span>
-                    </span>
-                    <span class="specialty-tag" style="background: #ecfdf5; color: #059669;">
-                        <span class="lang-es">🔬 Ciencia</span>
-                        <span class="lang-en">🔬 Science</span>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- General Consistency Score -->
-        <div class="chart-section">
-            <div class="section-title">
-                <h2>
-                    <span class="lang-es">🎯 Puntuación de Consistencia General</span>
-                    <span class="lang-en">🎯 General Consistency Score</span>
-                </h2>
-                <p>
-                    <span class="lang-es">¿Cuál modelo es más equilibrado en todas las tareas?</span>
-                    <span class="lang-en">Which model is most balanced across all tasks?</span>
-                </p>
-            </div>
-
-            <div class="consistency-bar-group" style="max-width: 700px; margin: 0 auto;">
-                <div class="consistency-bar-label">
-                    <span style="color: #7c3aed; font-weight: 700;">Qwen3-4B-Q4</span>
-                    <span style="font-weight: 700; color: #7c3aed;">92% <span class="winner-badge"> MÁS GENERAL</span></span>
-                </div>
-                <div class="consistency-bar-bg">
-                    <div class="consistency-bar-fill" data-width="92" style="background: linear-gradient(90deg, #7c3aed, #a78bfa);"></div>
-                </div>
-            </div>
-            <div class="consistency-bar-group" style="max-width: 700px; margin: 0.5rem auto;">
-                <div class="consistency-bar-label">
-                    <span style="color: #059669; font-weight: 700;">Gemma3-4B-Q4</span>
-                    <span style="font-weight: 700; color: #059669;">88%</span>
-                </div>
-                <div class="consistency-bar-bg">
-                    <div class="consistency-bar-fill" data-width="88" style="background: linear-gradient(90deg, #059669, #34d399);"></div>
-                </div>
-            </div>
-            <div class="consistency-bar-group" style="max-width: 700px; margin: 0.5rem auto;">
-                <div class="consistency-bar-label">
-                    <span style="color: #0891b2; font-weight: 700;">Qwen2.5-3B-Q4</span>
-                    <span style="font-weight: 700; color: #0891b2;">85%</span>
-                </div>
-                <div class="consistency-bar-bg">
-                    <div class="consistency-bar-fill" data-width="85" style="background: linear-gradient(90deg, #0891b2, #22d3ee);"></div>
-                </div>
-            </div>
-            <div class="consistency-bar-group" style="max-width: 700px; margin: 0.5rem auto;">
-                <div class="consistency-bar-label">
-                    <span style="color: #ea580c; font-weight: 700;">Llama3.2-3B-Q4</span>
-                    <span style="font-weight: 700; color: #ea580c;">82%</span>
-                </div>
-                <div class="consistency-bar-bg">
-                    <div class="consistency-bar-fill" data-width="82" style="background: linear-gradient(90deg, #ea580c, #fb923c);"></div>
-                </div>
-            </div>
-
-            <p style="text-align: center; margin-top: 1.2rem; font-size: 0.82rem; color: #64748b;">
-                <span class="lang-es">⬆️ Puntuación compuesta: razonamiento + código + matemáticas + multilingüismo + velocidad + consumo RAM</span>
-                <span class="lang-en">⬆️ Composite score: reasoning + code + math + multilingual + speed + RAM usage</span>
-            </p>
-        </div>
-
-        <!-- Radar Chart -->
-        <div class="chart-section">
-            <div class="section-title">
-                <h2>
-                    <span class="lang-es">🕸️ Análisis de Capacidades (Radar)</span>
-                    <span class="lang-en">️ Capabilities Analysis (Radar)</span>
-                </h2>
-                <p>
-                    <span class="lang-es">Comparación visual de fortalezas en cada área</span>
-                    <span class="lang-en">Visual comparison of strengths in each area</span>
-                </p>
-            </div>
-            <div class="charts-grid">
-                <div class="chart-wrapper">
-                    <canvas id="radarChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bar Charts -->
-        <div class="chart-section">
-            <div class="section-title">
-                <h2>
-                    <span class="lang-es">📊 Comparación Detallada</span>
-                    <span class="lang-en">📊 Detailed Comparison</span>
-                </h2>
-            </div>
-            <div class="charts-grid">
-                <div class="chart-wrapper">
-                    <canvas id="ramChart"></canvas>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="contextChart"></canvas>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="speedChart"></canvas>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="generalScoreChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Comparison Table -->
-        <div class="section-title">
-            <h2>
-                <span class="lang-es">📋 Tabla Comparativa Completa</span>
-                <span class="lang-en"> Complete Comparison Table</span>
-            </h2>
-        </div>
-        <div class="comparison-table-wrapper">
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th style="color: #0891b2;">Qwen2.5-3B-Q4</th>
-                        <th style="color: #7c3aed;">Qwen3-4B-Q4</th>
-                        <th style="color: #ea580c;">Llama3.2-3B-Q4</th>
-                        <th style="color: #059669;">Gemma3-4B-Q4</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="color: #0891b2; font-weight: 700;">Qwen2.5-3B-Q4</td>
-                        <td style="color: #7c3aed; font-weight: 700;">Qwen3-4B-Q4</td>
-                        <td style="color: #ea580c; font-weight: 700;">Llama3.2-3B-Q4</td>
-                        <td style="color: #059669; font-weight: 700;">Gemma3-4B-Q4</td>
-                    </tr>
-                    <tr>
-                        <td>Alibaba</td>
-                        <td>Alibaba</td>
-                        <td>Meta</td>
-                        <td>Google</td>
-                    </tr>
-                    <tr>
-                        <td>2.1 GB</td>
-                        <td>2.8 GB</td>
-                        <td style="font-weight: 700;">2.0 GB <span class="winner-badge">⚡ MENOR</span></td>
-                        <td>2.6 GB</td>
-                    </tr>
-                    <tr>
-                        <td>32K</td>
-                        <td>40K</td>
-                        <td style="font-weight: 700;">128K <span class="winner-badge"> MÁXIMO</span></td>
-                        <td>32K</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: 700;">45 tok/s</td>
-                        <td>35 tok/s</td>
-                        <td style="font-weight: 700;">50 tok/s <span class="winner-badge">⚡ RÁPIDO</span></td>
-                        <td>38 tok/s</td>
-                    </tr>
-                    <tr>
-                        <td>3B</td>
-                        <td style="font-weight: 700;">4B <span class="winner-badge">🧠 MÁS GRANDE</span></td>
-                        <td>3B</td>
-                        <td style="font-weight: 700;">4B <span class="winner-badge">🧠 MÁS GRANDE</span></td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: 700;">💻🔢</td>
-                        <td style="font-weight: 700;">🧠💻</td>
-                        <td style="font-weight: 700;">🧠📝</td>
-                        <td style="font-weight: 700;">🌐🔬</td>
-                    </tr>
-                    <tr>
-                        <td>85%</td>
-                        <td style="font-weight: 700;">92% <span class="winner-badge">🏆 #1</span></td>
-                        <td>82%</td>
-                        <td>88%</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="lang-es">Chips con poca RAM, código</span>
-                            <span class="lang-en">Low-RAM chips, code</span>
-                        </td>
-                        <td>
-                            <span class="lang-es">Uso general, mejor equilibrio</span>
-                            <span class="lang-en">General use, best balance</span>
-                        </td>
-                        <td>
-                            <span class="lang-es">Máximo contexto, inglés</span>
-                            <span class="lang-en">Max context, English</span>
-                        </td>
-                        <td>
-                            <span class="lang-es">Multilingüe, ciencia</span>
-                            <span class="lang-en">Multilingual, science</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Recommendations -->
-        <div class="recommendation-section">
-            <div class="section-title">
-                <h2>
-                    <span class="lang-es"> Recomendaciones por Caso de Uso</span>
-                    <span class="lang-en">💡 Recommendations by Use Case</span>
-                </h2>
-            </div>
-            <div class="rec-grid">
-                <div class="rec-card" style="--accent: #7c3aed; --bg-light: #f5f3ff;">
-                    <h4>
-                        <span class="lang-es">🏆 Mejor Overall</span>
-                        <span class="lang-en">🏆 Best Overall</span>
-                    </h4>
-                    <p style="color: #7c3aed; font-weight: 700;">Qwen3-4B-Q4</p>
-                    <p>
-                        <span class="lang-es">El más equilibrado. Excelente en razonamiento, código, multilingüismo y matemáticas. Ideal para teléfonos con 6GB+ RAM.</span>
-                        <span class="lang-en">The most balanced. Excellent in reasoning, code, multilingual and math. Ideal for phones with 6GB+ RAM.</span>
-                    </p>
-                </div>
-                <div class="rec-card" style="--accent: #ea580c; --bg-light: #fff7ed;">
-                    <h4>
-                        <span class="lang-es">⚡ Más Rápido / Menor RAM</span>
-                        <span class="lang-en">⚡ Fastest / Lowest RAM</span>
-                    </h4>
-                    <p style="color: #ea580c; font-weight: 700;">Llama3.2-3B-Q4</p>
-                    <p>
-                        <span class="lang-es">Solo 2.0GB de RAM pico y 50 tok/s. Contexto de 128K tokens. Perfecto para resumen de documentos largos.</span>
-                        <span class="lang-en">Only 2.0GB peak RAM and 50 tok/s. 128K token context. Perfect for long document summarization.</span>
-                    </p>
-                </div>
-                <div class="rec-card" style="--accent: #0891b2; --bg-light: #ecfeff;">
-                    <h4>
-                        <span class="lang-es">💻 Programación / Matemáticas</span>
-                        <span class="lang-en"> Coding / Mathematics</span>
-                    </h4>
-                    <p style="color: #0891b2; font-weight: 700;">Qwen2.5-3B-Q4</p>
-                    <p>
-                        <span class="lang-es">Especializado en generación de código y resolución de problemas matemáticos. Eficiente con solo 2.1GB RAM.</span>
-                        <span class="lang-en">Specialized in code generation and math problem solving. Efficient with only 2.1GB RAM.</span>
-                    </p>
-                </div>
-                <div class="rec-card" style="--accent: #059669; --bg-light: #ecfdf5;">
-                    <h4>
-                        <span class="lang-es">🌐 Multilingüismo / Ciencia</span>
-                        <span class="lang-en">🌐 Multilingual / Science</span>
-                    </h4>
-                    <p style="color: #059669; font-weight: 700;">Gemma3-4B-Q4</p>
-                    <p>
-                        <span class="lang-es">Fuerte en múltiples idiomas y conocimiento científico. Excelente siguiendo instrucciones complejas.</span>
-                        <span class="lang-en">Strong in multiple languages and scientific knowledge. Excellent at following complex instructions.</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Device Compatibility -->
-        <div class="chart-section">
-            <div class="section-title">
-                <h2>
-                    <span class="lang-es">📱 Compatibilidad con Dispositivos</span>
-                    <span class="lang-en">📱 Device Compatibility</span>
-                </h2>
-                <p>
-                    <span class="lang-es">RAM mínima recomendada del dispositivo para ejecutar cada modelo</span>
-                    <span class="lang-en">Minimum recommended device RAM to run each model</span>
-                </p>
-            </div>
-            <div class="charts-grid">
-                <div class="chart-wrapper">
-                    <canvas id="deviceChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>
-                <span class="lang-es"> Datos basados en benchmarks reales con llama.cpp / MLX en dispositivos móviles · 2025</span>
-                <span class="lang-en">📊 Data based on real benchmarks with llama.cpp / MLX on mobile devices · 2025</span>
-            </p>
-            <p style="margin-top: 0.5rem;">
-                <span class="lang-es">RAM pico = máximo uso medido con prompts complejos · Contexto = ventana máxima soportada</span>
-                <span class="lang-en">Peak RAM = maximum measured usage with complex prompts · Context = maximum supported window</span>
-            </p>
-        </div>
+    <div class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+        <div class="text-2xl font-bold">4</div>
+        <div class="text-sm text-blue-200" data-i18n="statModels">Modelos</div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+        <div class="text-2xl font-bold">Q4</div>
+        <div class="text-sm text-blue-200" data-i18n="statQuant">Cuantización</div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+        <div class="text-2xl font-bold">3-4B</div>
+        <div class="text-sm text-blue-200" data-i18n="statParams">Parámetros</div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+        <div class="text-2xl font-bold">128K</div>
+        <div class="text-sm text-blue-200" data-i18n="statContext">Contexto Máx</div>
+      </div>
     </div>
+  </div>
+</header>
 
-    <script>
-        const COLORS = {
-            qwen25: { bg: 'rgba(8, 145, 178, 0.15)', border: '#0891b2', solid: '#0891b2' },
-            qwen3: { bg: 'rgba(124, 58, 237, 0.15)', border: '#7c3aed', solid: '#7c3aed' },
-            llama: { bg: 'rgba(234, 88, 12, 0.15)', border: '#ea580c', solid: '#ea580c' },
-            gemma: { bg: 'rgba(5, 150, 105, 0.15)', border: '#059669', solid: '#059669' }
-        };
+<!-- Model Overview Cards -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <!-- Qwen2.5-3B -->
+    <div class="model-card card-qwen2 bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.1s">
+      <div class="flex items-center justify-between mb-3">
+        <span class="badge bg-blue-100 text-blue-700">Alibaba</span>
+        <span class="badge bg-emerald-100 text-emerald-700">⭐ Mejor RAM</span>
+      </div>
+      <h3 class="font-bold text-lg mb-1">Qwen2.5-3B</h3>
+      <p class="text-xs text-slate-500 mb-3" data-i18n="qwen2Desc">Open source, excel en código y matemáticas</p>
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="ramLabel">RAM Q4</span><span class="font-bold text-blue-600">~1.8 GB</span></div>
+        <div class="w-full bg-slate-100 rounded-full h-2"><div class="stat-bar bg-blue-500" style="width:45%"></div></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="contextLabel">Contexto</span><span class="font-bold text-blue-600">128K</span></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-blue-600">29+</span></div>
+      </div>
+    </div>
+    <!-- Qwen3-4B -->
+    <div class="model-card card-qwen3 bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.2s">
+      <div class="flex items-center justify-between mb-3">
+        <span class="badge bg-purple-100 text-purple-700">Alibaba</span>
+        <span class="badge bg-purple-100 text-purple-700">🧠 Razonamiento</span>
+      </div>
+      <h3 class="font-bold text-lg mb-1">Qwen3-4B</h3>
+      <p class="text-xs text-slate-500 mb-3" data-i18n="qwen3Desc">Generación 2025, reasoning mejorado</p>
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="ramLabel">RAM Q4</span><span class="font-bold text-purple-600">~2.6 GB</span></div>
+        <div class="w-full bg-slate-100 rounded-full h-2"><div class="stat-bar bg-purple-500" style="width:65%"></div></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="contextLabel">Contexto</span><span class="font-bold text-purple-600">128K</span></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-purple-600">100+</span></div>
+      </div>
+    </div>
+    <!-- Llama3.2-3B -->
+    <div class="model-card card-llama bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.3s">
+      <div class="flex items-center justify-between mb-3">
+        <span class="badge bg-emerald-100 text-emerald-700">Meta</span>
+        <span class="badge bg-emerald-100 text-emerald-700">🌐 General</span>
+      </div>
+      <h3 class="font-bold text-lg mb-1">Llama 3.2-3B</h3>
+      <p class="text-xs text-slate-500 mb-3" data-i18n="llamaDesc">Propósito general, optimizado para edge</p>
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="ramLabel">RAM Q4</span><span class="font-bold text-emerald-600">~1.9 GB</span></div>
+        <div class="w-full bg-slate-100 rounded-full h-2"><div class="stat-bar bg-emerald-500" style="width:47%"></div></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="contextLabel">Contexto</span><span class="font-bold text-emerald-600">128K</span></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-emerald-600">8+</span></div>
+      </div>
+    </div>
+    <!-- Gemma3-4B -->
+    <div class="model-card card-gemma bg-white rounded-2xl p-5 shadow-lg fade-in" style="animation-delay:0.4s">
+      <div class="flex items-center justify-between mb-3">
+        <span class="badge bg-amber-100 text-amber-700">Google</span>
+        <span class="badge bg-amber-100 text-amber-700">👁️ Vision</span>
+      </div>
+      <h3 class="font-bold text-lg mb-1">Gemma3-4B</h3>
+      <p class="text-xs text-slate-500 mb-3" data-i18n="gemmaDesc">Multimodal, eficiente para visión</p>
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="ramLabel">RAM Q4</span><span class="font-bold text-amber-600">~2.7 GB</span></div>
+        <div class="w-full bg-slate-100 rounded-full h-2"><div class="stat-bar bg-amber-500" style="width:68%"></div></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="contextLabel">Contexto</span><span class="font-bold text-amber-600">8K-28K</span></div>
+        <div class="flex justify-between text-xs"><span class="text-slate-500" data-i18n="langLabel">Idiomas</span><span class="font-bold text-amber-600">100+</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const labels = ['Qwen2.5-3B', 'Qwen3-4B', 'Llama3.2-3B', 'Gemma3-4B'];
-        const colorArr = [COLORS.qwen25, COLORS.qwen3, COLORS.llama, COLORS.gemma];
+<!-- Charts Section -->
+<section id="charts" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="chartsTitle"> Gráficas Comparativas</h2>
+  <p class="text-center text-slate-500 mb-10" data-i18n="chartsSubtitle">Análisis visual de rendimiento y consumo de recursos</p>
+  
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- RAM Usage Chart -->
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-1" data-i18n="ramChartTitle">Uso Real de RAM (Q4)</h3>
+      <p class="text-sm text-slate-500 mb-4" data-i18n="ramChartDesc">Memoria consumida durante inferencia en dispositivo móvil</p>
+      <div class="chart-container" style="height:300px">
+        <canvas id="ramChart"></canvas>
+      </div>
+    </div>
+    <!-- Context Window Chart -->
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-1" data-i18n="contextChartTitle">Ventana de Contexto</h3>
+      <p class="text-sm text-slate-500 mb-4" data-i18n="contextChartDesc">Tokens máximos de contexto soportados</p>
+      <div class="chart-container" style="height:300px">
+        <canvas id="contextChart"></canvas>
+      </div>
+    </div>
+    <!-- Radar Chart -->
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-1" data-i18n="radarTitle">Habilidades por Especialidad</h3>
+      <p class="text-sm text-slate-500 mb-4" data-i18n="radarDesc">Comparación de fortalezas en diferentes áreas</p>
+      <div class="chart-container" style="height:350px">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+    <!-- Performance Score Chart -->
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-1" data-i18n="benchTitle">Puntuación Benchmarks</h3>
+      <p class="text-sm text-slate-500 mb-4" data-i18n="benchDesc">MMLU, GSM8K y HumanEval (valores aproximados)</p>
+      <div class="chart-container" style="height:300px">
+        <canvas id="benchChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Animate bars on scroll
-        function animateBars() {
-            document.querySelectorAll('.ram-bar-fill, .consistency-bar-fill').forEach(bar => {
-                const rect = bar.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    bar.style.width = bar.dataset.width + '%';
-                }
-            });
+<!-- Mobile Compatibility -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+  <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-8 text-white">
+    <h2 class="text-2xl font-extrabold mb-6 text-center" data-i18n="mobileTitle"> Compatibilidad Móvil</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
+        <div class="text-3xl mb-3"></div>
+        <h4 class="font-bold text-blue-300 mb-2">Qwen2.5-3B</h4>
+        <p class="text-sm text-slate-300" data-i18n="mobileQwen2">Funciona en móviles con 4GB+ RAM. Ideal para dispositivos gama media. Inferencia ~15-25 tok/s.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
+        <div class="text-3xl mb-3">🟡</div>
+        <h4 class="font-bold text-purple-300 mb-2">Qwen3-4B</h4>
+        <p class="text-sm text-slate-300" data-i18n="mobileQwen3">Requiere 6GB+ RAM recomendado. Mejor rendimiento en gama alta. Inferencia ~10-20 tok/s.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
+        <div class="text-3xl mb-3">🟢</div>
+        <h4 class="font-bold text-emerald-300 mb-2">Llama 3.2-3B</h4>
+        <p class="text-sm text-slate-300" data-i18n="mobileLlama">Funciona en móviles con 4GB+ RAM. Muy optimizado para edge. Inferencia ~20-30 tok/s.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
+        <div class="text-3xl mb-3">🟡</div>
+        <h4 class="font-bold text-amber-300 mb-2">Gemma3-4B</h4>
+        <p class="text-sm text-slate-300" data-i18n="mobileGemma">Requiere 6GB+ RAM. Multimodal necesita más recursos. Inferencia ~10-18 tok/s.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison Tool -->
+<section id="compare" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
+  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="compareTitle">🔄 Comparador de Modelos</h2>
+  <p class="text-center text-slate-500 mb-8" data-i18n="compareSubtitle">Selecciona dos modelos para comparar especificaciones</p>
+  
+  <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+      <div class="flex-1">
+        <label class="block text-sm font-semibold text-slate-600 mb-2" data-i18n="selectModel1">Modelo A</label>
+        <select id="selectA" class="comparison-select w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:outline-none bg-white text-sm font-medium transition-all" onchange="updateComparison()">
+          <option value="qwen2">Qwen2.5-3B-Q4</option>
+          <option value="qwen3">Qwen3-4B-Q4</option>
+          <option value="llama">Llama 3.2-3B-Q4</option>
+          <option value="gemma">Gemma3-4B-Q4</option>
+        </select>
+      </div>
+      <div class="flex items-center justify-center pt-6 sm:pt-8">
+        <span class="text-2xl font-bold text-slate-300">VS</span>
+      </div>
+      <div class="flex-1">
+        <label class="block text-sm font-semibold text-slate-600 mb-2" data-i18n="selectModel2">Modelo B</label>
+        <select id="selectB" class="comparison-select w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none bg-white text-sm font-medium transition-all" onchange="updateComparison()">
+          <option value="qwen2">Qwen2.5-3B-Q4</option>
+          <option value="qwen3" selected>Qwen3-4B-Q4</option>
+          <option value="llama">Llama 3.2-3B-Q4</option>
+          <option value="gemma">Gemma3-4B-Q4</option>
+        </select>
+      </div>
+    </div>
+    
+    <div id="comparisonResult" class="overflow-x-auto">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- Best Use Cases -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
+  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="bestUseTitle">🎯 Mejor Uso por Escenario</h2>
+  <p class="text-center text-slate-500 mb-8" data-i18n="bestUseSubtitle">¿Qué modelo elegir según tu necesidad?</p>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-4 flex items-center gap-2">📱 <span data-i18n="scenarioMobile">Móvil / Edge</span></h3>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl">
+          <span class="text-emerald-600 font-bold text-sm">🏆</span>
+          <div><div class="font-semibold text-sm">Llama 3.2-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyLlama">Mayor velocidad, menor consumo RAM</div></div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
+          <span class="text-blue-600 font-bold text-sm">2°</span>
+          <div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Edge">Gran soporte multilingüe, buen balance</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-4 flex items-center gap-2">💻 <span data-i18n="scenarioCoding">Desarrollo / Código</span></h3>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
+          <span class="text-blue-600 font-bold text-sm">🏆</span>
+          <div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Code">Excelente en HumanEval, generación de código</div></div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
+          <span class="text-purple-600 font-bold text-sm">2°</span>
+          <div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Code">Reasoning mejorado para debugging</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-4 flex items-center gap-2">🧮 <span data-i18n="scenarioMath">Matemáticas / Ciencia</span></h3>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
+          <span class="text-purple-600 font-bold text-sm">🏆</span>
+          <div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Math">Razonamiento matemático superior</div></div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
+          <span class="text-blue-600 font-bold text-sm">2°</span>
+          <div><div class="font-semibold text-sm">Qwen2.5-3B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen2Math">Buen rendimiento en GSM8K</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 shadow-lg fade-in">
+      <h3 class="font-bold text-lg mb-4 flex items-center gap-2">️ <span data-i18n="scenarioVision">Visión / Multimodal</span></h3>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl">
+          <span class="text-amber-600 font-bold text-sm">🏆</span>
+          <div><div class="font-semibold text-sm">Gemma3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyGemmaVision">Diseñado nativamente para visión+texto</div></div>
+        </div>
+        <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
+          <span class="text-purple-600 font-bold text-sm">2°</span>
+          <div><div class="font-semibold text-sm">Qwen3-4B-Q4</div><div class="text-xs text-slate-500" data-i18n="whyQwen3Vision">Soporte multimodal en desarrollo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Technical Specs Table -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
+  <h2 class="text-3xl font-extrabold text-center mb-2" data-i18n="specsTitle">📋 Especificaciones Técnicas Completas</h2>
+  <p class="text-center text-slate-500 mb-8" data-i18n="specsSubtitle">Tabla detallada de todos los parámetros</p>
+  
+  <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-slate-50">
+            <th class="text-left p-4 font-bold text-slate-700" data-i18n="specCol">Especificación</th>
+            <th class="text-center p-4 font-bold text-blue-600">Qwen2.5-3B</th>
+            <th class="text-center p-4 font-bold text-purple-600">Qwen3-4B</th>
+            <th class="text-center p-4 font-bold text-emerald-600">Llama 3.2-3B</th>
+            <th class="text-center p-4 font-bold text-amber-600">Gemma3-4B</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specDev">Desarrollador</td><td class="p-4 text-center">Alibaba</td><td class="p-4 text-center">Alibaba</td><td class="p-4 text-center">Meta</td><td class="p-4 text-center">Google</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specParams">Parámetros</td><td class="p-4 text-center">3.1B</td><td class="p-4 text-center">4.0B</td><td class="p-4 text-center">3.05B</td><td class="p-4 text-center">4.0B</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specArch">Arquitectura</td><td class="p-4 text-center">MoE / Dense</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td><td class="p-4 text-center">Dense</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specRAM">RAM Q4 (real)</td><td class="p-4 text-center"><span class="badge bg-blue-100 text-blue-700">~1.8 GB</span></td><td class="p-4 text-center"><span class="badge bg-purple-100 text-purple-700">~2.6 GB</span></td><td class="p-4 text-center"><span class="badge bg-emerald-100 text-emerald-700">~1.9 GB</span></td><td class="p-4 text-center"><span class="badge bg-amber-100 text-amber-700">~2.7 GB</span></td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specSizeQ4">Tamaño Q4</td><td class="p-4 text-center">~1.7 GB</td><td class="p-4 text-center">~2.5 GB</td><td class="p-4 text-center">~1.8 GB</td><td class="p-4 text-center">~2.5 GB</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specContext">Contexto Máx</td><td class="p-4 text-center"><span class="badge bg-blue-100 text-blue-700">128K</span></td><td class="p-4 text-center"><span class="badge bg-purple-100 text-purple-700">128K</span></td><td class="p-4 text-center"><span class="badge bg-emerald-100 text-emerald-700">128K</span></td><td class="p-4 text-center"><span class="badge bg-amber-100 text-amber-700">8K-28K</span></td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specLangs">Idiomas</td><td class="p-4 text-center">29+</td><td class="p-4 text-center">100+</td><td class="p-4 text-center">8</td><td class="p-4 text-center">100+</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold">MMLU</td><td class="p-4 text-center font-bold">~54</td><td class="p-4 text-center font-bold">~62</td><td class="p-4 text-center font-bold">~51</td><td class="p-4 text-center font-bold">~58</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold">GSM8K</td><td class="p-4 text-center font-bold">~72</td><td class="p-4 text-center font-bold">~78</td><td class="p-4 text-center font-bold">~65</td><td class="p-4 text-center font-bold">~60</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold">HumanEval</td><td class="p-4 text-center font-bold">~45</td><td class="p-4 text-center font-bold">~48</td><td class="p-4 text-center font-bold">~38</td><td class="p-4 text-center font-bold">~35</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specVision">Soporte Visión</td><td class="p-4 text-center">❌</td><td class="p-4 text-center">️ Parcial</td><td class="p-4 text-center">❌</td><td class="p-4 text-center">✅ Sí</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specTool">Tool Calling</td><td class="p-4 text-center">✅ Sí</td><td class="p-4 text-center">✅ Sí</td><td class="p-4 text-center">✅ Sí</td><td class="p-4 text-center">✅ Sí</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specLicense">Licencia</td><td class="p-4 text-center" data-i18n="licenseApache">Apache 2.0</td><td class="p-4 text-center" data-i18n="licenseApache">Apache 2.0</td><td class="p-4 text-center" data-i18n="licenseLlama">Llama Community</td><td class="p-4 text-center" data-i18n="licenseGemma">Gemma (uso comercial)</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specInference">Vel. Inferencia* (tok/s)</td><td class="p-4 text-center">15-25</td><td class="p-4 text-center">10-20</td><td class="p-4 text-center">20-30</td><td class="p-4 text-center">10-18</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specFormat">Formatos</td><td class="p-4 text-center">GGUF, safetensors</td><td class="p-4 text-center">GGUF, safetensors</td><td class="p-4 text-center">GGUF, safetensors</td><td class="p-4 text-center">GGUF, safetensors</td></tr>
+          <tr class="compare-row"><td class="p-4 font-semibold" data-i18n="specBest">Mejor Para</td><td class="p-4 text-center" data-i18n="bestQwen2">Código + Multilingüe</td><td class="p-4 text-center" data-i18n="bestQwen3">Razonamiento + Math</td><td class="p-4 text-center" data-i18n="bestLlama">Uso general + Edge</td><td class="p-4 text-center" data-i18n="bestGemma">Visión + Multimodal</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="p-4 bg-slate-50 text-xs text-slate-500 border-t border-slate-200">
+      * Velocidad de inferencia estimada en Snapdragon 8 Gen 2 / Apple A16 con llama.cpp (4 threads). Valores aproximados basados en pruebas de la comunidad.
+    </div>
+  </div>
+</section>
+
+<!-- Winner Badge -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
+  <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-emerald-50 rounded-3xl p-8 sm:p-12 border border-slate-200">
+    <h2 class="text-3xl font-extrabold text-center mb-8" data-i18n="winnerTitle">🏆 Veredicto Final</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-2xl p-6 shadow-md">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">📱</span>
+          <h3 class="font-bold text-lg" data-i18n="winnerMobile">Para Móvil / Dispositivos Edge</h3>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Llama 3.2-3B-Q4</span>
+        </div>
+        <p class="text-sm text-slate-600" data-i18n="winnerMobileDesc">El más eficiente en RAM con el mejor rendimiento en dispositivos de gama media. Inferencia más rápida.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-md">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🧠</span>
+          <h3 class="font-bold text-lg" data-i18n="winnerGeneral">Más General / Capaz</h3>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Qwen3-4B-Q4</span>
+        </div>
+        <p class="text-sm text-slate-600" data-i18n="winnerGeneralDesc">Mejores puntuaciones en benchmarks de razonamiento y matemáticas. Soporte 100+ idiomas.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-md">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">💻</span>
+          <h3 class="font-bold text-lg" data-i18n="winnerCode">Para Programación</h3>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Qwen2.5-3B-Q4</span>
+        </div>
+        <p class="text-sm text-slate-600" data-i18n="winnerCodeDesc">Mejor puntuación en HumanEval. Excelente generación de código en múltiples lenguajes.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-md">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">👁️</span>
+          <h3 class="font-bold text-lg" data-i18n="winnerVision">Para Visión / Multimodal</h3>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-bold">🥇 Gemma3-4B-Q4</span>
+        </div>
+        <p class="text-sm text-slate-600" data-i18n="winnerVisionDesc">Único con soporte nativo multimodal. Ideal para análisis de imágenes + texto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-slate-900 text-white py-12 mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h3 class="text-xl font-bold mb-4">AI Models Infographic</h3>
+    <p class="text-slate-400 text-sm mb-2" data-i18n="footerNote">Datos basados en especificaciones oficiales de los desarrolladores y pruebas de la comunidad (2025).</p>
+    <p class="text-slate-500 text-xs" data-i18n="footerDisclaimer">Los valores de rendimiento son aproximados y pueden variar según el hardware, cuantización y framework utilizado.</p>
+  </div>
+</footer>
+
+<script>
+// ==================== DATA ====================
+const modelsData = {
+  qwen2: {
+    name: 'Qwen2.5-3B-Q4',
+    dev: 'Alibaba',
+    params: '3.1B',
+    ram: 1.8,
+    ramStr: '~1.8 GB',
+    context: 128000,
+    contextStr: '128K',
+    sizeQ4: '1.7 GB',
+    langs: '29+',
+    mmlu: 54,
+    gsm8k: 72,
+    humaneval: 45,
+    vision: 'No',
+    tool: 'Sí',
+    license: 'Apache 2.0',
+    inference: '15-25',
+    formats: 'GGUF, safetensors',
+    best: 'Código + Multilingüe',
+    bestEn: 'Code + Multilingual',
+    specialties: { razonamiento: 72, matematicas: 75, codigo: 82, idiomas: 85, vision: 0, general: 70 },
+    color: '#3b82f6',
+    colorLight: '#dbeafe'
+  },
+  qwen3: {
+    name: 'Qwen3-4B-Q4',
+    dev: 'Alibaba',
+    params: '4.0B',
+    ram: 2.6,
+    ramStr: '~2.6 GB',
+    context: 128000,
+    contextStr: '128K',
+    sizeQ4: '2.5 GB',
+    langs: '100+',
+    mmlu: 62,
+    gsm8k: 78,
+    humaneval: 48,
+    vision: 'Parcial',
+    tool: 'Sí',
+    license: 'Apache 2.0',
+    inference: '10-20',
+    formats: 'GGUF, safetensors',
+    best: 'Razonamiento + Math',
+    bestEn: 'Reasoning + Math',
+    specialties: { razonamiento: 88, matematicas: 85, codigo: 78, idiomas: 90, vision: 30, general: 82 },
+    color: '#8b5cf6',
+    colorLight: '#ede9fe'
+  },
+  llama: {
+    name: 'Llama 3.2-3B-Q4',
+    dev: 'Meta',
+    params: '3.05B',
+    ram: 1.9,
+    ramStr: '~1.9 GB',
+    context: 128000,
+    contextStr: '128K',
+    sizeQ4: '1.8 GB',
+    langs: '8',
+    mmlu: 51,
+    gsm8k: 65,
+    humaneval: 38,
+    vision: 'No',
+    tool: 'Sí',
+    license: 'Llama Community',
+    inference: '20-30',
+    formats: 'GGUF, safetensors',
+    best: 'Uso general + Edge',
+    bestEn: 'General + Edge',
+    specialties: { razonamiento: 65, matematicas: 62, codigo: 60, idiomas: 55, vision: 0, general: 85 },
+    color: '#10b981',
+    colorLight: '#d1fae5'
+  },
+  gemma: {
+    name: 'Gemma3-4B-Q4',
+    dev: 'Google',
+    params: '4.0B',
+    ram: 2.7,
+    ramStr: '~2.7 GB',
+    context: 28000,
+    contextStr: '8K-28K',
+    sizeQ4: '2.5 GB',
+    langs: '100+',
+    mmlu: 58,
+    gsm8k: 60,
+    humaneval: 35,
+    vision: 'Sí',
+    tool: 'Sí',
+    license: 'Gemma (uso comercial)',
+    inference: '10-18',
+    formats: 'GGUF, safetensors',
+    best: 'Visión + Multimodal',
+    bestEn: 'Vision + Multimodal',
+    specialties: { razonamiento: 60, matematicas: 55, codigo: 55, idiomas: 88, vision: 95, general: 72 },
+    color: '#f59e0b',
+    colorLight: '#fef3c7'
+  }
+};
+
+const i18n = {
+  es: {
+    heroBadge: 'Análisis Técnico 2025',
+    heroTitle: 'Comparativa de Modelos',
+    heroSubtitle: 'IA Locales para Móvil',
+    heroDesc: 'Análisis detallado de RAM, contexto, especialidades y rendimiento real de los 4 modelos más populares en cuantización Q4.',
+    heroCTA1: '📊 Ver Gráficas',
+    heroCTA2: '🔄 Comparar Modelos',
+    statModels: 'Modelos',
+    statQuant: 'Cuantización',
+    statParams: 'Parámetros',
+    statContext: 'Contexto Máx',
+    qwen2Desc: 'Open source, excel en código y matemáticas',
+    qwen3Desc: 'Generación 2025, reasoning mejorado',
+    llamaDesc: 'Propósito general, optimizado para edge',
+    gemmaDesc: 'Multimodal, eficiente para visión',
+    ramLabel: 'RAM Q4',
+    contextLabel: 'Contexto',
+    langLabel: 'Idiomas',
+    chartsTitle: '📊 Gráficas Comparativas',
+    chartsSubtitle: 'Análisis visual de rendimiento y consumo de recursos',
+    ramChartTitle: 'Uso Real de RAM (Q4)',
+    ramChartDesc: 'Memoria consumida durante inferencia en dispositivo móvil',
+    contextChartTitle: 'Ventana de Contexto',
+    contextChartDesc: 'Tokens máximos de contexto soportados',
+    radarTitle: 'Habilidades por Especialidad',
+    radarDesc: 'Comparación de fortalezas en diferentes áreas',
+    benchTitle: 'Puntuación Benchmarks',
+    benchDesc: 'MMLU, GSM8K y HumanEval (valores aproximados)',
+    mobileTitle: '📱 Compatibilidad Móvil',
+    mobileQwen2: 'Funciona en móviles con 4GB+ RAM. Ideal para dispositivos gama media. Inferencia ~15-25 tok/s.',
+    mobileQwen3: 'Requiere 6GB+ RAM recomendado. Mejor rendimiento en gama alta. Inferencia ~10-20 tok/s.',
+    mobileLlama: 'Funciona en móviles con 4GB+ RAM. Muy optimizado para edge. Inferencia ~20-30 tok/s.',
+    mobileGemma: 'Requiere 6GB+ RAM. Multimodal necesita más recursos. Inferencia ~10-18 tok/s.',
+    compareTitle: '🔄 Comparador de Modelos',
+    compareSubtitle: 'Selecciona dos modelos para comparar especificaciones',
+    selectModel1: 'Modelo A',
+    selectModel2: 'Modelo B',
+    bestUseTitle: '🎯 Mejor Uso por Escenario',
+    bestUseSubtitle: '¿Qué modelo elegir según tu necesidad?',
+    scenarioMobile: 'Móvil / Edge',
+    scenarioCoding: 'Desarrollo / Código',
+    scenarioMath: 'Matemáticas / Ciencia',
+    scenarioVision: 'Visión / Multimodal',
+    whyLlama: 'Mayor velocidad, menor consumo RAM',
+    whyQwen2Edge: 'Gran soporte multilingüe, buen balance',
+    whyQwen2Code: 'Excelente en HumanEval, generación de código',
+    whyQwen3Code: 'Reasoning mejorado para debugging',
+    whyQwen3Math: 'Razonamiento matemático superior',
+    whyQwen2Math: 'Buen rendimiento en GSM8K',
+    whyGemmaVision: 'Diseñado nativamente para visión+texto',
+    whyQwen3Vision: 'Soporte multimodal en desarrollo',
+    specsTitle: '📋 Especificaciones Técnicas Completas',
+    specsSubtitle: 'Tabla detallada de todos los parámetros',
+    specCol: 'Especificación',
+    specDev: 'Desarrollador',
+    specParams: 'Parámetros',
+    specArch: 'Arquitectura',
+    specRAM: 'RAM Q4 (real)',
+    specSizeQ4: 'Tamaño Q4',
+    specContext: 'Contexto Máx',
+    specLangs: 'Idiomas',
+    specVision: 'Soporte Visión',
+    specTool: 'Tool Calling',
+    specLicense: 'Licencia',
+    specInference: 'Vel. Inferencia* (tok/s)',
+    specFormat: 'Formatos',
+    specBest: 'Mejor Para',
+    bestQwen2: 'Código + Multilingüe',
+    bestQwen3: 'Razonamiento + Math',
+    bestLlama: 'Uso general + Edge',
+    bestGemma: 'Visión + Multimodal',
+    winnerTitle: '🏆 Veredicto Final',
+    winnerMobile: 'Para Móvil / Dispositivos Edge',
+    winnerMobileDesc: 'El más eficiente en RAM con el mejor rendimiento en dispositivos de gama media. Inferencia más rápida.',
+    winnerGeneral: 'Más General / Capaz',
+    winnerGeneralDesc: 'Mejores puntuaciones en benchmarks de razonamiento y matemáticas. Soporte 100+ idiomas.',
+    winnerCode: 'Para Programación',
+    winnerCodeDesc: 'Mejor puntuación en HumanEval. Excelente generación de código en múltiples lenguajes.',
+    winnerVision: 'Para Visión / Multimodal',
+    winnerVisionDesc: 'Único con soporte nativo multimodal. Ideal para análisis de imágenes + texto.',
+    footerNote: 'Datos basados en especificaciones oficiales de los desarrolladores y pruebas de la comunidad (2025).',
+    footerDisclaimer: 'Los valores de rendimiento son aproximados y pueden variar según el hardware, cuantización y framework utilizado.',
+    compRAM: 'RAM Q4 (real)',
+    compSize: 'Tamaño modelo Q4',
+    compContext: 'Contexto máximo',
+    compLangs: 'Soporte de idiomas',
+    compMMLU: 'MMLU (conocimiento general)',
+    compGSM8K: 'GSM8K (matemáticas)',
+    compHumanEval: 'HumanEval (código)',
+    compVision: 'Soporte visión',
+    compTool: 'Tool calling',
+    compInference: 'Vel. inferencia (tok/s)',
+    compBest: 'Mejor para',
+    compWinner: ' Ganador',
+    compTie: ' Empate'
+  },
+  en: {
+    heroBadge: 'Technical Analysis 2025',
+    heroTitle: 'Model Comparison',
+    heroSubtitle: 'Local AI for Mobile',
+    heroDesc: 'Detailed analysis of RAM, context, specialties and real performance of the 4 most popular Q4 quantized models.',
+    heroCTA1: '📊 View Charts',
+    heroCTA2: '🔄 Compare Models',
+    statModels: 'Models',
+    statQuant: 'Quantization',
+    statParams: 'Parameters',
+    statContext: 'Max Context',
+    qwen2Desc: 'Open source, excels in code and math',
+    qwen3Desc: '2025 generation, improved reasoning',
+    llamaDesc: 'General purpose, edge-optimized',
+    gemmaDesc: 'Multimodal, vision-efficient',
+    ramLabel: 'RAM Q4',
+    contextLabel: 'Context',
+    langLabel: 'Languages',
+    chartsTitle: '📊 Comparative Charts',
+    chartsSubtitle: 'Visual analysis of performance and resource consumption',
+    ramChartTitle: 'Real RAM Usage (Q4)',
+    ramChartDesc: 'Memory consumed during inference on mobile device',
+    contextChartTitle: 'Context Window',
+    contextChartDesc: 'Maximum context tokens supported',
+    radarTitle: 'Specialty Skills',
+    radarDesc: 'Comparison of strengths in different areas',
+    benchTitle: 'Benchmark Scores',
+    benchDesc: 'MMLU, GSM8K and HumanEval (approximate values)',
+    mobileTitle: '📱 Mobile Compatibility',
+    mobileQwen2: 'Works on phones with 4GB+ RAM. Ideal for mid-range devices. Inference ~15-25 tok/s.',
+    mobileQwen3: '6GB+ RAM recommended. Best performance on flagship devices. Inference ~10-20 tok/s.',
+    mobileLlama: 'Works on phones with 4GB+ RAM. Highly optimized for edge. Inference ~20-30 tok/s.',
+    mobileGemma: 'Requires 6GB+ RAM. Multimodal needs more resources. Inference ~10-18 tok/s.',
+    compareTitle: '🔄 Model Comparator',
+    compareSubtitle: 'Select two models to compare specifications',
+    selectModel1: 'Model A',
+    selectModel2: 'Model B',
+    bestUseTitle: '🎯 Best Use by Scenario',
+    bestUseSubtitle: 'Which model to choose based on your needs?',
+    scenarioMobile: 'Mobile / Edge',
+    scenarioCoding: 'Development / Code',
+    scenarioMath: 'Math / Science',
+    scenarioVision: 'Vision / Multimodal',
+    whyLlama: 'Highest speed, lowest RAM usage',
+    whyQwen2Edge: 'Great multilingual support, good balance',
+    whyQwen2Code: 'Excellent in HumanEval, code generation',
+    whyQwen3Code: 'Improved reasoning for debugging',
+    whyQwen3Math: 'Superior mathematical reasoning',
+    whyQwen2Math: 'Good performance on GSM8K',
+    whyGemmaVision: 'Natively designed for vision+text',
+    whyQwen3Vision: 'Multimodal support in development',
+    specsTitle: ' Complete Technical Specifications',
+    specsSubtitle: 'Detailed table of all parameters',
+    specCol: 'Specification',
+    specDev: 'Developer',
+    specParams: 'Parameters',
+    specArch: 'Architecture',
+    specRAM: 'RAM Q4 (real)',
+    specSizeQ4: 'Q4 Size',
+    specContext: 'Max Context',
+    specLangs: 'Languages',
+    specVision: 'Vision Support',
+    specTool: 'Tool Calling',
+    specLicense: 'License',
+    specInference: 'Inference Speed* (tok/s)',
+    specFormat: 'Formats',
+    specBest: 'Best For',
+    bestQwen2: 'Code + Multilingual',
+    bestQwen3: 'Reasoning + Math',
+    bestLlama: 'General + Edge',
+    bestGemma: 'Vision + Multimodal',
+    winnerTitle: '🏆 Final Verdict',
+    winnerMobile: 'For Mobile / Edge Devices',
+    winnerMobileDesc: 'Most efficient in RAM with the best performance on mid-range devices. Fastest inference.',
+    winnerGeneral: 'Most General / Capable',
+    winnerGeneralDesc: 'Best scores in reasoning and math benchmarks. Support for 100+ languages.',
+    winnerCode: 'For Programming',
+    winnerCodeDesc: 'Best HumanEval score. Excellent code generation across multiple languages.',
+    winnerVision: 'For Vision / Multimodal',
+    winnerVisionDesc: 'Only one with native multimodal support. Ideal for image + text analysis.',
+    footerNote: 'Data based on official developer specifications and community testing (2025).',
+    footerDisclaimer: 'Performance values are approximate and may vary depending on hardware, quantization and framework used.',
+    compRAM: 'RAM Q4 (real)',
+    compSize: 'Q4 Model Size',
+    compContext: 'Max Context',
+    compLangs: 'Language Support',
+    compMMLU: 'MMLU (general knowledge)',
+    compGSM8K: 'GSM8K (mathematics)',
+    compHumanEval: 'HumanEval (code)',
+    compVision: 'Vision Support',
+    compTool: 'Tool Calling',
+    compInference: 'Inference Speed (tok/s)',
+    compBest: 'Best For',
+    compWinner: '🏆 Winner',
+    compTie: '🤝 Tie'
+  }
+};
+
+let currentLang = 'es';
+let chartInstances = {};
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btnES').className = `px-3 py-1 rounded-lg text-sm font-semibold transition-all ${lang === 'es' ? 'bg-white text-purple-700 shadow' : 'text-slate-600'}`;
+  document.getElementById('btnEN').className = `px-3 py-1 rounded-lg text-sm font-semibold transition-all ${lang === 'en' ? 'bg-white text-purple-700 shadow' : 'text-slate-600'}`;
+  
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key]) el.textContent = i18n[lang][key];
+  });
+  
+  updateComparison();
+  updateCharts();
+}
+
+function updateComparison() {
+  const selA = document.getElementById('selectA').value;
+  const selB = document.getElementById('selectB').value;
+  const mA = modelsData[selA];
+  const mB = modelsData[selB];
+  const L = i18n[currentLang];
+  
+  const specs = [
+    { key: 'dev', labelKey: 'specDev' },
+    { key: 'params', labelKey: 'specParams' },
+    { key: 'ramStr', labelKey: 'compRAM', numeric: true, higher: false },
+    { key: 'contextStr', labelKey: 'compContext', numeric: true, higher: true },
+    { key: 'sizeQ4', labelKey: 'compSize' },
+    { key: 'langs', labelKey: 'compLangs' },
+    { key: 'mmlu', labelKey: 'compMMLU', numeric: true, higher: true },
+    { key: 'gsm8k', labelKey: 'compGSM8K', numeric: true, higher: true },
+    { key: 'humaneval', labelKey: 'compHumanEval', numeric: true, higher: true },
+    { key: 'vision', labelKey: 'compVision' },
+    { key: 'tool', labelKey: 'compTool' },
+    { key: 'inference', labelKey: 'compInference' },
+    { key: 'best', labelKey: 'compBest' },
+  ];
+  
+  let html = '<table class="w-full text-sm"><thead><tr class="bg-slate-50"><th class="text-left p-4 font-bold text-slate-700 w-1/3">' + (L.specCol || 'Specification') + '</th><th class="text-center p-4 font-bold w-1/3" style="color:' + mA.color + '">' + mA.name + '</th><th class="text-center p-4 font-bold w-1/3" style="color:' + mB.color + '">' + mB.name + '</th></tr></thead><tbody class="divide-y divide-slate-100">';
+  
+  specs.forEach(spec => {
+    const valA = mA[spec.key];
+    const valB = mB[spec.key];
+    const label = L[spec.labelKey] || spec.labelKey;
+    let winnerA = false, winnerB = false;
+    
+    if (spec.numeric && spec.higher !== undefined) {
+      const numA = parseFloat(String(valA).replace(/[^0-9.]/g, ''));
+      const numB = parseFloat(String(valB).replace(/[^0-9.]/g, ''));
+      if (spec.higher) {
+        winnerA = numA > numB;
+        winnerB = numB > numA;
+      } else {
+        winnerA = numA < numB;
+        winnerB = numB < numA;
+      }
+    }
+    
+    const styleA = winnerA ? 'font-bold' : '';
+    const styleB = winnerB ? 'font-bold' : '';
+    const bgA = winnerA ? mA.colorLight : '';
+    const bgB = winnerB ? mB.colorLight : '';
+    
+    html += `<tr class="compare-row"><td class="p-4 font-semibold">${label}</td><td class="p-4 text-center ${styleA}" style="${winnerA ? 'background:' + bgA + ';border-radius:8px;' : ''}">${valA}${winnerA ? ' ' + L.compWinner : ''}</td><td class="p-4 text-center ${styleB}" style="${winnerB ? 'background:' + bgB + ';border-radius:8px;' : ''}">${valB}${winnerB ? ' ' + L.compWinner : ''}</td></tr>`;
+  });
+  
+  html += '</tbody></table>';
+  document.getElementById('comparisonResult').innerHTML = html;
+}
+
+function updateCharts() {
+  const L = i18n[currentLang];
+  const isEn = currentLang === 'en';
+  
+  // Destroy existing charts
+  Object.values(chartInstances).forEach(c => c.destroy());
+  chartInstances = {};
+  
+  Chart.defaults.font.family = "'Inter', sans-serif";
+  Chart.defaults.font.size = 12;
+  
+  const modelKeys = ['qwen2', 'qwen3', 'llama', 'gemma'];
+  const modelNames = modelKeys.map(k => modelsData[k].name.replace('-Q4', ''));
+  const modelColors = modelKeys.map(k => modelsData[k].color);
+  const modelColorsAlpha = modelKeys.map(k => modelsData[k].color + '33');
+  
+  // RAM Chart
+  const ramCtx = document.getElementById('ramChart').getContext('2d');
+  chartInstances.ram = new Chart(ramCtx, {
+    type: 'bar',
+    data: {
+      labels: modelNames,
+      datasets: [{
+        label: isEn ? 'RAM (GB)' : 'RAM (GB)',
+        data: modelKeys.map(k => modelsData[k].ram),
+        backgroundColor: modelColors,
+        borderRadius: 8,
+        borderSkipped: false,
+        barThickness: 40,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'end',
+          formatter: v => v + ' GB',
+          font: { weight: 'bold', size: 11 },
+          color: '#475569'
         }
-        window.addEventListener('scroll', animateBars);
-        window.addEventListener('load', () => {
-            setTimeout(animateBars, 300);
-        });
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 3.5,
+          ticks: { stepSize: 0.5, callback: v => v + ' GB' },
+          grid: { color: '#f1f5f9' }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 10, weight: '600' } }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+  
+  // Context Chart
+  const ctxCtx = document.getElementById('contextChart').getContext('2d');
+  chartInstances.context = new Chart(ctxCtx, {
+    type: 'bar',
+    data: {
+      labels: modelNames,
+      datasets: [{
+        label: isEn ? 'Context (tokens)' : 'Contexto (tokens)',
+        data: modelKeys.map(k => modelsData[k].context),
+        backgroundColor: modelColors,
+        borderRadius: 8,
+        borderSkipped: false,
+        barThickness: 40,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'end',
+          formatter: v => v >= 1000 ? (v/1000) + 'K' : v,
+          font: { weight: 'bold', size: 11 },
+          color: '#475569'
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: { callback: v => v >= 1000 ? (v/1000) + 'K' : v },
+          grid: { color: '#f1f5f9' }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { font: { size: 10, weight: '600' } }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+  
+  // Radar Chart
+  const radarCtx = document.getElementById('radarChart').getContext('2d');
+  const radarLabels = isEn 
+    ? ['Reasoning', 'Math', 'Code', 'Languages', 'Vision', 'General']
+    : ['Razonamiento', 'Matemáticas', 'Código', 'Idiomas', 'Visión', 'General'];
+  
+  chartInstances.radar = new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+      labels: radarLabels,
+      datasets: modelKeys.map((key, idx) => ({
+        label: modelsData[key].name.replace('-Q4', ''),
+        data: [
+          modelsData[key].specialties.razonamiento,
+          modelsData[key].specialties.matematicas,
+          modelsData[key].specialties.codigo,
+          modelsData[key].specialties.idiomas,
+          modelsData[key].specialties.vision,
+          modelsData[key].specialties.general
+        ],
+        borderColor: modelsData[key].color,
+        backgroundColor: modelsData[key].color + '18',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: modelsData[key].color,
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { usePointStyle: true, pointStyle: 'circle', padding: 15, font: { size: 11 } }
+        }
+      },
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { stepSize: 20, backdropColor: 'transparent', font: { size: 9 } },
+          pointLabels: { font: { size: 11, weight: '600' } },
+          grid: { color: '#e2e8f0' },
+          angleLines: { color: '#e2e8f0' }
+        }
+      }
+    }
+  });
+  
+  // Benchmark Chart
+  const benchCtx = document.getElementById('benchChart').getContext('2d');
+  chartInstances.bench = new Chart(benchCtx, {
+    type: 'bar',
+    data: {
+      labels: modelNames,
+      datasets: [
+        {
+          label: 'MMLU',
+          data: modelKeys.map(k => modelsData[k].mmlu),
+          backgroundColor: modelColors[0],
+          borderRadius: 6,
+          borderSkipped: false,
+          barPercentage: 0.8,
+          categoryPercentage: 0.7,
+        },
+        {
+          label: 'GSM8K',
+          data: modelKeys.map(k => modelsData[k].gsm8k),
+          backgroundColor: modelColors[1],
+          borderRadius: 6,
+          borderSkipped: false,
+          barPercentage: 0.8,
+          categoryPercentage: 0.7,
+        },
+        {
+          label: 'HumanEval',
+          data: modelKeys.map(k => modelsData[k].humaneval),
+          backgroundColor: modelColors[2],
+          borderRadius: 6,
+          borderSkipped: false,
+          barPercentage: 0.8,
+          categoryPercentage: 0.7,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 15, font: { size: 11 } }
+        },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'end',
+          font: { size: 10, weight: 'bold' },
+          color: '#475569',
+          formatter: v => v
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { stepSize: 20, callback: v => v + '%' },
+          grid: { color: '#f1f5f9' }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 10, weight: '600' } }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
 
-        // Radar Chart
-        new Chart(document.getElementById('radarChart'), {
-            type: 'radar',
-            data: {
-                labels: [
-                    document.querySelector('body').lang === 'en' ? 'Multilingual' : 'Multilingüismo',
-                    document.querySelector('body').lang === 'en' ? 'Coding' : 'Programación',
-                    document.querySelector('body').lang === 'en' ? 'Mathematics' : 'Matemáticas',
-                    document.querySelector('body').lang === 'en' ? 'Reasoning' : 'Razonamiento',
-                    document.querySelector('body').lang === 'en' ? 'Speed' : 'Velocidad'
-                ],
-                datasets: [
-                    {
-                        label: 'Qwen2.5-3B',
-                        data: [85, 92, 90, 80, 78],
-                        borderColor: COLORS.qwen25.border,
-                        backgroundColor: COLORS.qwen25.bg,
-                        pointBackgroundColor: COLORS.qwen25.solid,
-                        borderWidth: 2, pointRadius: 4
-                    },
-                    {
-                        label: 'Qwen3-4B',
-                        data: [93, 88, 86, 92, 68],
-                        borderColor: COLORS.qwen3.border,
-                        backgroundColor: COLORS.qwen3.bg,
-                        pointBackgroundColor: COLORS.qwen3.solid,
-                        borderWidth: 2, pointRadius: 4
-                    },
-                    {
-                        label: 'Llama3.2-3B',
-                        data: [60, 75, 78, 88, 95],
-                        borderColor: COLORS.llama.border,
-                        backgroundColor: COLORS.llama.bg,
-                        pointBackgroundColor: COLORS.llama.solid,
-                        borderWidth: 2, pointRadius: 4
-                    },
-                    {
-                        label: 'Gemma3-4B',
-                        data: [95, 80, 82, 85, 72],
-                        borderColor: COLORS.gemma.border,
-                        backgroundColor: COLORS.gemma.bg,
-                        pointBackgroundColor: COLORS.gemma.solid,
-                        borderWidth: 2, pointRadius: 4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { font: { size: 11, family: 'Inter' }, padding: 15 }
-                    }
-                },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: { stepSize: 20, font: { size: 10 } },
-                        pointLabels: { font: { size: 12, family: 'Inter', weight: '600' } },
-                        grid: { color: 'rgba(0,0,0,0.06)' }
-                    }
-                }
-            }
-        });
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
 
-        // RAM Chart
-        new Chart(document.getElementById('ramChart'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'RAM Pico Móvil (GB) / Peak Mobile RAM (GB)',
-                    data: [2.1, 2.8, 2.0, 2.6],
-                    backgroundColor: [
-                        COLORS.qwen25.bg, COLORS.qwen3.bg, COLORS.llama.bg, COLORS.gemma.bg
-                    ],
-                    borderColor: [
-                        COLORS.qwen25.border, COLORS.qwen3.border, COLORS.llama.border, COLORS.gemma.border
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { labels: { font: { size: 11, family: 'Inter' } } },
-                    annotation: {}
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true, max: 3.5,
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                        ticks: { font: { size: 11 } }
-                    },
-                    x: {
-                        ticks: { font: { size: 10, family: 'Inter', weight: '600' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
+document.querySelectorAll('.fade-in').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'all 0.6s ease';
+  observer.observe(el);
+});
 
-        // Context Chart
-        new Chart(document.getElementById('contextChart'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Ventana de Contexto (K tokens) / Context Window (K tokens)',
-                    data: [32, 40, 128, 32],
-                    backgroundColor: [
-                        COLORS.qwen25.bg, COLORS.qwen3.bg, COLORS.llama.bg, COLORS.gemma.bg
-                    ],
-                    borderColor: [
-                        COLORS.qwen25.border, COLORS.qwen3.border, COLORS.llama.border, COLORS.gemma.border
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { labels: { font: { size: 11, family: 'Inter' } } }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true, max: 150,
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                        ticks: { font: { size: 11 } }
-                    },
-                    x: {
-                        ticks: { font: { size: 10, family: 'Inter', weight: '600' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
+// Initialize
+setLang('es');
+updateComparison();
 
-        // Speed Chart
-        new Chart(document.getElementById('speedChart'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Velocidad (tok/s) / Speed (tok/s)',
-                    data: [45, 35, 50, 38],
-                    backgroundColor: [
-                        COLORS.qwen25.bg, COLORS.qwen3.bg, COLORS.llama.bg, COLORS.gemma.bg
-                    ],
-                    borderColor: [
-                        COLORS.qwen25.border, COLORS.qwen3.border, COLORS.llama.border, COLORS.gemma.border
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { labels: { font: { size: 11, family: 'Inter' } } }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true, max: 60,
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                        ticks: { font: { size: 11 } }
-                    },
-                    x: {
-                        ticks: { font: { size: 10, family: 'Inter', weight: '600' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-
-        // General Score Chart
-        new Chart(document.getElementById('generalScoreChart'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Consistencia General (%) / General Consistency (%)',
-                    data: [85, 92, 82, 88],
-                    backgroundColor: [
-                        COLORS.qwen25.bg, COLORS.qwen3.bg, COLORS.llama.bg, COLORS.gemma.bg
-                    ],
-                    borderColor: [
-                        COLORS.qwen25.border, COLORS.qwen3.border, COLORS.llama.border, COLORS.gemma.border
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { labels: { font: { size: 11, family: 'Inter' } } }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true, max: 100,
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                        ticks: { font: { size: 11 } }
-                    },
-                    y: {
-                        ticks: { font: { size: 10, family: 'Inter', weight: '600' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-
-        // Device Compatibility Chart
-        new Chart(document.getElementById('deviceChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Qwen2.5-3B', 'Qwen3-4B', 'Llama3.2-3B', 'Gemma3-4B'],
-                datasets: [
-                    {
-                        label: 'RAM Modelo (GB)',
-                        data: [2.1, 2.8, 2.0, 2.6],
-                        backgroundColor: [
-                            'rgba(8,145,178,0.7)', 'rgba(124,58,237,0.7)',
-                            'rgba(234,88,12,0.7)', 'rgba(5,150,105,0.7)'
-                        ],
-                        borderRadius: 6, borderSkipped: false
-                    },
-                    {
-                        label: 'RAM Sistema Android (GB)',
-                        data: [1.5, 1.5, 1.5, 1.5],
-                        backgroundColor: 'rgba(148,163,184,0.5)',
-                        borderRadius: 6, borderSkipped: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { labels: { font: { size: 11, family: 'Inter' } } },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                return ctx.dataset.label + ': ' + ctx.parsed.y + ' GB';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true, max: 5,
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                        ticks: { font: { size: 11 } }
-                    },
-                    x: {
-                        ticks: { font: { size: 10, family: 'Inter', weight: '600' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    </script>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
 </body>
 </html>
+
 
